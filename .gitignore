@@ -2,6 +2,7 @@
 !.gitignore
 !.emacs.d
 !.emacs
+!.emacs_for_raspberry
 .emacs.d/auto-save-list
 session.*
 ac-comphist.dat

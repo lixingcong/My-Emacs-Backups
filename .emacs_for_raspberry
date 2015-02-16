@@ -1,0 +1,351 @@
+;;左侧栏的行号与代码间距
+(set-fringe-mode '(1 . 1))
+
+;;脚本总文件夹位置
+(add-to-list 'load-path "~/.emacs.d/site-lisp")
+
+;;在M-x命令界面补全函数提示，依赖my-icomplete+.el和icomplete-settings.el
+(require 'my-icomplete+)
+(require 'icomplete-settings)
+
+;; 页面平滑滚动，scroll-margin 5 靠近屏幕边沿3行时开始滚动，可以很好的看到上下文。
+(setq scroll-margin 5 scroll-conservatively 10000)
+
+(setq kill-do-not-save-duplicates t)
+;; 设置粘贴缓冲条目数量  
+(setq kill-ring-max 200)
+;; 显示列号
+(setq column-number-mode t)
+;; 高亮搜索  
+(setq search-highlight t)  
+(setq query-replace-highlight t)  
+;; 先格式化再补全
+(setq tab-always-indent 'complete)
+;; Emacs找不到合适的模式时，缺省使用text-mode
+(setq default-major-mode 'text-mode)
+;; 在fringe上显示一个小箭头指示当前buffer的边界
+;;(setq-default indicate-buffer-boundaries 'left)
+;;为重名的buffer在前面加上其父目录的名字来让buffer的名字区分开来，而不是单纯的加一个没有太多意义的序号
+;;(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
+;; 不要闪烁光标, 烦不烦啊
+(blink-cursor-mode -1)
+
+(global-set-key [(f10)] 'menu-bar-mode)
+(setq gdb-many-windows t)
+;;笔记功能，添加笔记后按next-error即可跳至这里
+(defun add-code-review-note ()
+  "Add note for current file and line number"
+  (interactive)
+  (let ((file-name (buffer-file-name))
+		(file-line (line-number-at-pos)))
+	(switch-to-buffer-other-window (get-buffer-create"NOTES"))
+	(goto-char(point-min))
+	(when (not (search-forward"-*- mode:compilation-shell-minor"
+							  nil t))
+	  (compilation-shell-minor-mode 1)
+	  (insert"-*- mode:compilation-shell-minor -*-\n\n"))
+	(goto-char(point-max))
+	(if(/= (current-column) 0)
+		(newline))
+	(insert file-name":"(number-to-string file-line)": ")))
+;;添加书签功能
+;;(global-set-key (kbd "M-h") 'add-code-review-note) 
+;;根据语法缩进
+(global-set-key (kbd "M-o") 'indent-according-to-mode) 
+
+(defun toggle-window-split ()
+  (interactive)
+  (if (= (count-windows) 2)
+      (let* ((this-win-buffer (window-buffer))
+             (next-win-buffer (window-buffer (next-window)))
+             (this-win-edges (window-edges (selected-window)))
+             (next-win-edges (window-edges (next-window)))
+             (this-win-2nd (not (and (<= (car this-win-edges)
+                                         (car next-win-edges))
+                                     (<= (cadr this-win-edges)
+                                         (cadr next-win-edges)))))
+             (splitter
+              (if (= (car this-win-edges)
+                     (car (window-edges (next-window))))
+                  'split-window-horizontally
+                'split-window-vertically)))
+        (delete-other-windows)
+        (let ((first-win (selected-window)))
+          (funcall splitter)
+          (if this-win-2nd (other-window 1))
+          (set-window-buffer (selected-window) this-win-buffer)
+          (set-window-buffer (next-window) next-win-buffer)
+          (select-window first-win)
+          (if this-win-2nd (other-window 1))))))
+;;设置窗格垂直还是水平(首先按c-x 2，且有多个窗口)
+(global-set-key (kbd "M-3") 'toggle-window-split) 
+(require 'ahei-misc)
+(require 'eval-after-load)
+
+;;这个插件可以鼠标滚轮调整子窗口的宽度和高度
+(require 'doremi)
+(require 'doremi-cmd)
+;;快捷键 调整子窗口 高度 宽度
+(global-set-key (kbd "C--") 'doremi-window-height+) 
+(global-set-key (kbd "C-=") 'doremi-window-width+)
+
+
+;;取消24版本函数缺少提示：make-local-hook
+(defalias 'make-local-hook
+  (if (featurep 'xemacs)
+      'make-local-hook
+    'ignore))
+(require 'util)
+
+(require 'cursor-chg)
+;;光标自动改变，需要cursor-chg.el,cursor-change.el
+(require 'cursor-change)  
+(cursor-change-mode 1)
+
+;;是否开启vi模式？
+(require 'emaci)
+(require 'emaci-settings)
+(global-set-key [(f11)] 'emaci-mode)
+;;鼠标变形
+(require 'cursor-change)
+;;(require 'ascii)
+;;按alt-l注释当前行，快速屏蔽，按alt-;给当前行尾加注释
+;;按alt-v选择自动补全，tab只能选择第一个
+;;按alt-r翻动鼠标，按alt-e遍历每行尾巴
+;;运行speedbar可以打开文件管理器
+;;时间戳设置(time-stamp)，设定文档上次保存的信息iiii
+;;只要里在你得文档里有Time-stamp:的设置，就会自动保存时间戳
+;;启用time-stamp
+(setq time-stamp-active t)
+;;去掉time-stamp的警告？
+(setq time-stamp-warn-inactive t)
+;;设置time-stamp的格式，我如下的格式所得的一个例子：
+(setq time-stamp-format " %f %04y年%02m月%02d日 %02H:%02M:%02S ")
+;;将修改时间戳添加到保存文件的动作里。
+(add-hook 'write-file-hooks 'time-stamp)
+
+(defun ska-point-to-register()
+  "Store cursorposition _fast_ in a register.
+Use ska-jump-to-register to jump back to the stored
+position."
+  (interactive)
+  (setq zmacs-region-stays t)
+  (point-to-register 8))
+(defun ska-jump-to-register()
+  "Switches between current cursorposition and position
+that was stored with ska-point-to-register."
+  (interactive)
+  (setq zmacs-region-stays t)
+  (let ((tmp (point-marker)))
+        (jump-to-register 8)
+        (set-register 8 tmp)))
+;;设置某个点来回跳动光标
+(global-set-key (kbd "M-2") 'ska-jump-to-register)
+(global-set-key (kbd "M-1") 'ska-point-to-register)
+;;(setq default-directory "F:/work/dev_cpp/temp/")
+(setq default-directory "~/code/python/")
+;;选中一块代码，按 Ctrl-Alt-\ 对这块代码进行格式化。
+;;调试模式下 f3移除断点 f4设置断点 f5.gud-go  f6.gud-finish  f7.gud-next f8.gud-step  
+;;gud-next 下一行(跳过函数) gud-step 步入(进入函数) gud-finish 跳出函数
+;;可以用gdb下M-x运行gud-tooltip-mode开启后将鼠标指针停留在变量名上显示
+;;可以用gdb下M-x运行gdb-many-windows打开多窗口显示
+;;阅读模式,依赖ahei-misc.el。和eval-after-load。util.el。emaci.el
+;;进入emaci-mode后, 和vi类似, hjkl上下左右以字符单位移动光标
+;;f, b前进和后退一个单词
+;;I回到行首并且退出emaci-mode, A回到行尾并且退出emaci-mode
+;;u向上滚半屏, SPC向下滚半屏, w向上滚一屏, d向下滚一屏
+;;<和>回到buffer头和buffer尾 g也是回到buffer头, 
+;;B执行eval-buffer
+;;1最大化当前window, 2把当前buffer垂直分成两半，3把当前buffer水平非常两半，q退出emaci-mode
+;;(require 'emaci-settings)
+;; 一些基本的小函数
+;;(require 'ahei-misc)
+;; 利用`eval-after-load'加快启动速度的库
+;; 用eval-after-load避免不必要的elisp包的加载
+;; http://emacser.com/eval-after-load.htm
+(require 'eval-after-load)
+
+
+;;显示高亮当前行
+;;(global-hl-line-mode 1)
+;;变换3个窗口位置,仅在C-x 3中使用
+(defun switch-windows-buffer ()
+  (interactive)
+  (let ((this-buffer (window-buffer)))
+    (switch-to-buffer (window-buffer (next-window (selected-window))))
+    (switch-to-buffer-other-window this-buffer)
+    (other-window 1)
+    )
+)
+;;(global-set-key (kbd "M-6") 'switch-windows-buffer)
+;;打开当前文件夹的终端
+(defun popup-term ()
+  (interactive)
+  (apply 'start-process "terminal" nil popup-terminal-command)
+  )
+(setq popup-terminal-command '("gnome-terminal"))
+(global-set-key (kbd "C-M-c") 'popup-term)
+
+;;关闭提示音
+(setq ring-bell-function 'ignore)
+
+(global-set-key (kbd "C-M-x") 'gdb)
+;;设置默认的编译选项
+(setq compile-command "g++ -g -o 1 ")
+;;(setq compile-command "javac ")
+;;(setq compile-command "c51.bat ")
+;;插入一行
+(global-set-key (kbd "M-n") '(lambda () 
+(interactive) 
+(move-end-of-line 1) 
+(newline-and-indent)))
+;;编译
+(global-set-key (kbd "C-M-z") 'compile)
+;;错误信息显示在回显区
+;;(condition-case err(progn(require 'xxx) )(error(message "Can't load xxx-mode %s" (cdr err))))
+;;不产生临时文件
+(setq-default make-backup-files nil)
+;;删除当前行
+(global-set-key (kbd "M-i") 'kill-line)
+;;定位到下一个,上一个编译错误
+(global-set-key (kbd "M-q") 'next-error)
+(global-set-key (kbd "M-a") 'previous-error)
+;;添加自动补全函数原型功能
+
+;;显示行号
+(global-linum-mode)
+;;设置标记c-m
+(global-set-key (kbd "C-i") 'set-mark-command)
+;;设置补全功能
+;;(global-set-key (kbd "M-m") 'dabbrev-expand)
+;;括号跳转
+(global-set-key (kbd "C-7") 'forward-sexp)
+(global-set-key (kbd "C-8") 'backward-sexp)
+;;字符左一个右一个
+(global-set-key (kbd "C-k") 'backward-char)
+(global-set-key (kbd "C-j") 'forward-char)
+;;上一行下一行
+(global-set-key (kbd "M-k") 'previous-line)
+(global-set-key (kbd "M-j") 'next-line)[(f8)]
+;;上页下页
+(global-set-key (kbd "M-7") 'scroll-up)
+(global-set-key (kbd "M-8") 'scroll-down)
+;;撤销
+(global-set-key (kbd "C-z") 'undo)
+;;按下C-y后，按此键，切换粘贴的内容
+;;隐藏菜单栏
+(menu-bar-mode -1)
+;; 关闭启动画面
+(setq inhibit-startup-message t)
+;;到达某一行
+(global-set-key (kbd "M-g") 'goto-line)
+;;代码折叠:
+(add-hook 'c-mode-hook 'hs-minor-mode)
+(add-hook 'c++-mode-hook 'hs-minor-mode) 
+
+;;快速拷贝整一行,鼠标定位到行首即可拷贝
+(global-set-key (kbd "M-m") 'qiang-copy-line)
+(defun qiang-comment-dwim-line (&optional arg)
+  "Replacement for the comment-dwim command.
+If no region is selected and current line is not blank and we are not at the end of the line,
+then comment current line.
+Replaces default behaviour of comment-dwim, when it inserts comment at the end of the line."
+  (interactive "*P")
+  (comment-normalize-vars)
+  (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
+      (comment-or-uncomment-region (line-beginning-position) (line-end-position))
+    (comment-dwim arg)))
+
+;;快速注释整句按alt+l
+(global-set-key "\M-l" 'qiang-comment-dwim-line)
+
+(setq gdb-many-windows t)
+(setq default-major-mode 'text-mode)
+(fset 'yes-or-no-p 'y-or-n-p)
+(show-paren-mode t)
+(display-time-mode 1)
+(setq display-time-24hr-format t)
+(setq display-time-day-and-date t)
+(setq display-time-interval 10)
+(set-fontset-font "fontset-default" 'gb18030' ("Droid Sans Fallback" . "unicode-bmp"))
+(require 'linum)
+(setq linum-mode t)
+(global-linum-mode 1)
+(setq make-backup-files nil)
+(auto-save-mode nil)
+(setq auto-save-default nil)
+
+;; 设置智能缩进
+(setq indent-tabs-mode nil)
+(setq default-tab-width 4)
+(setq tab-width 4)
+(setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40
+      44 48 52 56 60 64 68 72 76 80 84 88 92 96)) 
+
+(defconst my-c-style
+  '((c-tab-always-indent        . t)
+    (c-comment-only-line-offset . 4)
+    (c-hanging-braces-alist     . ((substatement-open after)
+                                   (brace-list-open)))
+    (c-hanging-colons-alist     . ((member-init-intro before)
+                                   (inher-intro)
+                                   (case-label after)
+                                   (label after)
+                                   (access-label after)))
+    (c-cleanup-list             . (scope-operator
+                                   empty-defun-braces
+                                   defun-close-semi))
+    (c-offsets-alist            . ((arglist-close . c-lineup-arglist)
+                                   (substatement-open . 0)
+                                   (case-label        . 4)
+                                   (block-open        . 0)
+                                   (knr-argdecl-intro . -)))
+    (c-echo-syntactic-information-p . t)
+    )
+  "My C Programming Style")
+
+;; offset customizations not in my-c-style
+(setq c-offsets-alist '((member-init-intro . ++)))
+
+;; Customizations for all modes in CC Mode.
+(defun my-c-mode-common-hook ()
+  ;; add my personal style and set it for the current buffer
+  (c-add-style "PERSONAL" my-c-style t)
+  ;; other customizations
+  (setq tab-width 4
+        ;; this will make sure spaces are used instead of tabs
+        indent-tabs-mode nil)
+  ;; we like auto-newline and hungry-delete
+;  (c-toggle-auto-hungry-state 1)
+  ;; key bindings for all supported languages.  We can put these in
+  ;; c-mode-base-map because c-mode-map, c++-mode-map, objc-mode-map,
+  ;; java-mode-map, idl-mode-map, and pike-mode-map inherit from it.
+  (define-key c-mode-base-map "\C-m" 'c-context-line-break)
+  )
+
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+;;(require 'php-mode)
+;; 设置光标为竖线
+;;(setq-default cursor-type 'bar)
+
+;;======================    code setting        =========================
+(dolist (command '(yank yank-pop))
+  (eval
+   `(defadvice ,command (after indent-region activate)
+      (and (not current-prefix-arg)
+           (member major-mode
+                   '(emacs-lisp-mode
+                     lisp-mode
+                     clojure-mode
+                     php-mode
+                     scheme-mode
+                     haskell-mode
+                     ruby-mode
+                     rspec-mode
+                     python-mode
+                     c-mode
+                     c++-mode))
+           (let ((mark-even-if-inactive transient-mark-mode))
+             (indent-region (region-beginning) (region-end) nil))))))
+;;----------------------    END    code setting    ---------------------
