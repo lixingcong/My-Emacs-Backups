@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: algo
+# key: alg
+# --
+#include <algorithm>

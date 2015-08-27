@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: inf
+# key: inf
+# --
+#define INF 0x3f3f3f3f

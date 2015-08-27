@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: qsort() 
+# key: qsort()
+# --
+qsort(${1:*a},${2:how many?},${3:size?},${4:cmp});//include <cstdlib>

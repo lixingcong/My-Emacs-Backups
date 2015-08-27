@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: cmp(map)
+# key: cmp(map)
+# --
+struct cmp
+{bool operator()(const ${1:int}& a, const ${2:int}& b)const{return a${3:>}b;}};
+//return,如果a>b，是建成map容器大到小自动排序（红黑树）

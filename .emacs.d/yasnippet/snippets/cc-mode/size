@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: siz() 
+# key: siz()
+# --
+size()$0

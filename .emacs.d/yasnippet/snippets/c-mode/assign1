@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: .assign() 
+# key: assign(const string& str)
+# --
+assign(${&str});

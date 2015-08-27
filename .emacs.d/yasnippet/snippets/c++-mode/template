@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: template
+# key: tem
+# --
+template<class ${1:T}>

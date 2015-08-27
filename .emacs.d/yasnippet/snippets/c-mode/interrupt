@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: interrupt
+# key: inter
+# --
+void ISP_${Name}(void) interrupt ${?0:INT0 1:T0 2:INT1 3:T1 4:COM}
+{
+    $0
+}

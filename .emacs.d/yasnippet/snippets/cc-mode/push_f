@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: .push_front() 
+# key: push_front()
+# --
+push_front(${what?});$0

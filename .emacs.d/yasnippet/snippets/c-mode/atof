@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: atof
+# key: atof(char *str)
+# --
+atof(${});//include <cstdlib>$0

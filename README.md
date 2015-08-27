@@ -1,2 +1,7 @@
-# emacs_linux_configures
-Emacs Configures Backup for Ubuntu 14.04 x64
+# My Configures Backup for Emacs 
+
+## Work on ubuntu 14.04.2 x64
+
+## Preview
+
+![](.emacs.d/site-lisp/preview.png) 

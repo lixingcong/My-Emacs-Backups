@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: fprintf
+# key: fprintf()
+# --
+fprintf(${1:*FILE},"${2:format}",${3:parameters});//include <cstdio>

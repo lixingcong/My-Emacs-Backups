@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: cmp(sort)
+# key: cmp(sort)
+# --
+bool cmp(const ${1:type} &a,const ${2:type} &b){return a${3:>}b;}

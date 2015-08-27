@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: .find() 
+# key: find(const string)
+# --
+find(${})$0
