@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: py-comment
+# key: iiii
+# --
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Time-stamp: <>
+"""
+${1:comments}
+""" 
+
+$0

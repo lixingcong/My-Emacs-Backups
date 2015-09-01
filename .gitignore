@@ -3,3 +3,4 @@
 !.emacs.d
 !.emacs
 .emacs.d/auto-save-list
+session.*

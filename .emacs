@@ -121,7 +121,11 @@
       'make-local-hook
     'ignore))
 (require 'util)
+
 (require 'cursor-chg)
+;;光标自动改变，需要cursor-chg.el,cursor-change.el
+(require 'cursor-change)  
+(cursor-change-mode 1)
 
 ;;是否开启vi模式？
 (require 'emaci)
@@ -183,7 +187,7 @@ that was stored with ska-point-to-register."
 (global-set-key (kbd "M-2") 'ska-jump-to-register)
 (global-set-key (kbd "M-1") 'ska-point-to-register)
 ;;(setq default-directory "F:/work/dev_cpp/temp/")
-(setq default-directory "~/cpp/")
+(setq default-directory "~/code/python/")
 ;;选中一块代码，按 Ctrl-Alt-\ 对这块代码进行格式化。
 ;;调试模式下 f3移除断点 f4设置断点 f5.gud-go  f6.gud-finish  f7.gud-next f8.gud-step  
 ;;gud-next 下一行(跳过函数) gud-step 步入(进入函数) gud-finish 跳出函数
@@ -204,9 +208,7 @@ that was stored with ska-point-to-register."
 ;; 用eval-after-load避免不必要的elisp包的加载
 ;; http://emacser.com/eval-after-load.htm
 (require 'eval-after-load)
-;;光标自动改变，需要cursor-chg.el,cursor-change.el
-(require 'cursor-change)  
-(cursor-change-mode 1)  
+
 ;;(require 'ascii)
 ;;快捷键打开ascii，需要ascii.el
 ;;(global-set-key (kbd "M-6") 'ascii-on)
@@ -227,9 +229,12 @@ that was stored with ska-point-to-register."
   (interactive)
   (apply 'start-process "terminal" nil popup-terminal-command)
   )
-(setq popup-terminal-command '("cmd" "/c" "start"))
+(setq popup-terminal-command '("gnome-terminal"))
 (global-set-key (kbd "C-M-c") 'popup-term)
 ;;如果是windows的话要改成("cmd" "/c" "start")
+;;如果ubuntu根据实际修改
+;;http://askubuntu.com/questions/183775/how-do-i-open-a-terminal
+
 (defadvice kill-line (before check-position activate)
   (if (member major-mode
               '(emacs-lisp-mode scheme-mode lisp-mode
