@@ -1,5 +1,8 @@
 ;;脚本总文件夹位置。总是在.emacs文件最前面
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
+;;上一行下一行。总是在.emacs文件最前面
+(global-set-key (kbd "M-k") 'previous-line)
+(global-set-key (kbd "M-j") 'next-line)
 
 ;;2016.1
 ;;K&R 风格
@@ -327,9 +330,7 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 ;;字符左一个右一个
 (global-set-key (kbd "C-k") 'backward-char)
 (global-set-key (kbd "C-j") 'forward-char)
-;;上一行下一行
-(global-set-key (kbd "M-k") 'previous-line)
-(global-set-key (kbd "M-j") 'next-line)
+
 ;;上页下页
 (global-set-key (kbd "M-7") 'scroll-up)
 (global-set-key (kbd "M-8") 'scroll-down)
