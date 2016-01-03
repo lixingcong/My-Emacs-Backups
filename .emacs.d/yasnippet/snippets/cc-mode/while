@@ -2,7 +2,6 @@
 # name: while
 # key: while
 # --
-while(${1:condition}) 
-    {    
-      $0
-    }
+while(${1:condition}){    
+	$0
+}
