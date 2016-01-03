@@ -1,8 +1,8 @@
 /*
-!.gitignore
-!.emacs.d
-!.emacs
+/.emacs.d/ac-comphist.dat
 !.emacs_for_raspberry
-.emacs.d/auto-save-list
-session.*
-ac-comphist.dat
+!.emacs
+!site-lisp
+!.emacs.d
+!.gitignore
+!README.md

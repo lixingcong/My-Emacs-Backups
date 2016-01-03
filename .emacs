@@ -1,8 +1,35 @@
+;;脚本总文件夹位置。总是在.emacs文件最前面
+(add-to-list 'load-path "~/.emacs.d/site-lisp")
+
+;;2016.1
+;;K&R 风格
+(setq c-default-style "k&r"
+	c-basic-offset 4)
+		  
+;;自动插入配对括号
+;; auto close bracket insertion. New in emacs 24
+(electric-pair-mode 1)
+
+;;自动空格
+;;https://github.com/davidshepherd7/electric-operator
+;;依赖24.4新版的with-eval-after-load宏定义，所以emacs24.3缺少下面的宏会无法启动。
+(unless (fboundp 'with-eval-after-load)
+  (defmacro with-eval-after-load (file &rest body)
+    (declare (indent 1) (debug t))
+    `(eval-after-load ,file '(progn ,@body))))
+(require 'subr-x)
+(require 'names)
+(require 'dash)
+(require 'electric-operator)
+
+(global-set-key [(f12)] 'electric-operator-mode)
+
+;;区块代码左右平移
+;;运行indent-rigidly或者C-x tab
+
+;;2015.4
 ;;左侧栏的行号与代码间距
 (set-fringe-mode '(1 . 1))
-
-;;脚本总文件夹位置
-(add-to-list 'load-path "~/.emacs.d/site-lisp")
 
 ;;在M-x命令界面补全函数提示，依赖my-icomplete+.el和icomplete-settings.el
 (require 'my-icomplete+)
@@ -165,7 +192,7 @@
 ;;延迟
 (setq ac-quick-help-delay 0.5)  
 ;;tab继续补全
-(ac-set-trigger-key "TAB")  
+;;(ac-set-trigger-key "TAB")  
 (global-set-key (kbd "M-v")'ac-complete)  
 ;;(define-key ac-mode-map  [(control tab)] 'auto-complete)
 (defun ska-point-to-register()
@@ -291,7 +318,7 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 ;;显示行号
 (global-linum-mode)
 ;;设置标记c-m
-(global-set-key (kbd "C-i") 'set-mark-command)
+(global-set-key (kbd "C-o") 'set-mark-command)
 ;;设置补全功能
 ;;(global-set-key (kbd "M-m") 'dabbrev-expand)
 ;;括号跳转
@@ -302,7 +329,7 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 (global-set-key (kbd "C-j") 'forward-char)
 ;;上一行下一行
 (global-set-key (kbd "M-k") 'previous-line)
-(global-set-key (kbd "M-j") 'next-line)[(f8)]
+(global-set-key (kbd "M-j") 'next-line)
 ;;上页下页
 (global-set-key (kbd "M-7") 'scroll-up)
 (global-set-key (kbd "M-8") 'scroll-down)
@@ -436,57 +463,12 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 (setq auto-save-default nil)
 
 ;; 设置智能缩进
-(setq indent-tabs-mode nil)
+;;(setq indent-tabs-mode nil)
 (setq default-tab-width 4)
 (setq tab-width 4)
 (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40
       44 48 52 56 60 64 68 72 76 80 84 88 92 96)) 
 
-(defconst my-c-style
-  '((c-tab-always-indent        . t)
-    (c-comment-only-line-offset . 4)
-    (c-hanging-braces-alist     . ((substatement-open after)
-                                   (brace-list-open)))
-    (c-hanging-colons-alist     . ((member-init-intro before)
-                                   (inher-intro)
-                                   (case-label after)
-                                   (label after)
-                                   (access-label after)))
-    (c-cleanup-list             . (scope-operator
-                                   empty-defun-braces
-                                   defun-close-semi))
-    (c-offsets-alist            . ((arglist-close . c-lineup-arglist)
-                                   (substatement-open . 0)
-                                   (case-label        . 4)
-                                   (block-open        . 0)
-                                   (knr-argdecl-intro . -)))
-    (c-echo-syntactic-information-p . t)
-    )
-  "My C Programming Style")
-
-;; offset customizations not in my-c-style
-(setq c-offsets-alist '((member-init-intro . ++)))
-
-;; Customizations for all modes in CC Mode.
-(defun my-c-mode-common-hook ()
-  ;; add my personal style and set it for the current buffer
-  (c-add-style "PERSONAL" my-c-style t)
-  ;; other customizations
-  (setq tab-width 4
-        ;; this will make sure spaces are used instead of tabs
-        indent-tabs-mode nil)
-  ;; we like auto-newline and hungry-delete
-;  (c-toggle-auto-hungry-state 1)
-  ;; key bindings for all supported languages.  We can put these in
-  ;; c-mode-base-map because c-mode-map, c++-mode-map, objc-mode-map,
-  ;; java-mode-map, idl-mode-map, and pike-mode-map inherit from it.
-  (define-key c-mode-base-map "\C-m" 'c-context-line-break)
-  )
-
-(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
-;;(require 'php-mode)
-;; 设置光标为竖线
-;;(setq-default cursor-type 'bar)
 
 ;;======================    code setting        =========================
 (dolist (command '(yank yank-pop))
