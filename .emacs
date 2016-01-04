@@ -5,6 +5,14 @@
 (global-set-key (kbd "M-j") 'next-line)
 
 ;;2016.1
+
+;;python缩进4个空格
+(add-hook 'python-mode-hook
+      (lambda ()
+        (setq indent-tabs-mode t)
+        (setq tab-width 4)
+        (setq python-indent 4)))
+        
 ;;K&R 风格
 (setq c-default-style "k&r"
 	c-basic-offset 4)
@@ -217,7 +225,7 @@ that was stored with ska-point-to-register."
 (global-set-key (kbd "M-2") 'ska-jump-to-register)
 (global-set-key (kbd "M-1") 'ska-point-to-register)
 ;;(setq default-directory "F:/work/dev_cpp/temp/")
-(setq default-directory "~/code/python/")
+(setq default-directory "~/")
 ;;选中一块代码，按 Ctrl-Alt-\ 对这块代码进行格式化。
 ;;调试模式下 f3移除断点 f4设置断点 f5.gud-go  f6.gud-finish  f7.gud-next f8.gud-step  
 ;;gud-next 下一行(跳过函数) gud-step 步入(进入函数) gud-finish 跳出函数
