@@ -224,8 +224,10 @@ that was stored with ska-point-to-register."
 ;;设置某个点来回跳动光标
 (global-set-key (kbd "M-2") 'ska-jump-to-register)
 (global-set-key (kbd "M-1") 'ska-point-to-register)
-;;(setq default-directory "F:/work/dev_cpp/temp/")
-(setq default-directory "~/")
+
+;;设置默认工作目录
+;;(setq default-directory "~/code/python/")
+
 ;;选中一块代码，按 Ctrl-Alt-\ 对这块代码进行格式化。
 ;;调试模式下 f3移除断点 f4设置断点 f5.gud-go  f6.gud-finish  f7.gud-next f8.gud-step  
 ;;gud-next 下一行(跳过函数) gud-step 步入(进入函数) gud-finish 跳出函数
@@ -322,9 +324,12 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 ;;放大字体: Ctrl-x Ctrl-+ 或 Ctrl-x Ctrl-=
 ;;缩小字体: Ctrl-x Ctrl–
 ;;重置字体: Ctrl-x Ctrl-0
-;; For Windows
-(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+
+;;滚轮调节字体大小
+;; For linux only, use <C-wheel-up> on windows
+(global-set-key (kbd "<C-mouse-4>") 'text-scale-increase)
+(global-set-key (kbd "<C-mouse-5>") 'text-scale-decrease)
+
 ;;反撤销C-x u
 ;;显示行号
 (global-linum-mode)
