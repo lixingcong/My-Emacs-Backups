@@ -189,7 +189,7 @@
 ;;启动ya函数补全
 (add-to-list 'load-path  "~/.emacs.d/yasnippet")  
 (require 'yasnippet)  
-(yas/global-mode 1)  
+(yas-global-mode 1)  
 ;;启动auto-complete补全上文出现的字词插件
 (add-to-list 'load-path  "~/.emacs.d/auto-complete")
 (setq ac-dictionary-directories "~/.emacs.d/auto-complete/ac-dict")
