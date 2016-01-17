@@ -1,5 +1,7 @@
 ;;脚本总文件夹位置。总是在.emacs文件最前面
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
+;;开启剪贴后删除当前set-mark内容
+(delete-selection-mode)
 ;;上一行下一行。总是在.emacs文件最前面
 (global-set-key (kbd "M-k") 'previous-line)
 (global-set-key (kbd "M-j") 'next-line)
