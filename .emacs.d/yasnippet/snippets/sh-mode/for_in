@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: for loop
+# name: forin_loop
 # key: forin
 # --
 for ${1:var} in ${2:stuff}; do
