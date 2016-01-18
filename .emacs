@@ -500,7 +500,9 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
                      haskell-mode
                      ruby-mode
                      rspec-mode
-                     python-mode
+					;; python mode is annoying for me
+                     ;;python-mode
+					 java-mode
                      c-mode
                      c++-mode))
            (let ((mark-even-if-inactive transient-mark-mode))
