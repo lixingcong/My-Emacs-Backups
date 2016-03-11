@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_1='/home/li/.config'
+let g:netrw_dirhist_2='/media/li/MEDIAS_100GB/ubuntu_downloads/markdown/my_hexo_blog/.travis'
+let g:netrw_dirhist_3='/tmp/1'

@@ -6,3 +6,5 @@
 !.emacs.d
 !.gitignore
 !README.md
+!.vimrc
+!.vim
