@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: memcpy()
-# key: memcpy()
-# --
-memcpy(${1:void *dest},${2:void *source},sizeof(${3:}));

@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: fscanf
-# key: fscanf()
-# --
-fscanf(${*FILE},"${format}",${parameter});//include <cstdio>

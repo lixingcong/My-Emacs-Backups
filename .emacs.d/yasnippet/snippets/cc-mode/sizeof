@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: sizeof() 
-# key: sizeof()
-# --
-sizeof(${1:type})$0

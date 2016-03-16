@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: strcmp
-# key: strcmp
-# --
-strcmp(${1:*a},${2:*b})$0

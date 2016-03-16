@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: free
-# key: free()
-# --
-free ${1:what?};

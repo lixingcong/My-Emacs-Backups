@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: sort() 
-# key: sort()
-# --
-sort(${1:begin},${2:end},${3:cmp});//include <algorithm>
