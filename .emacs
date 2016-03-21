@@ -1,3 +1,7 @@
+;;默认启动字体大小，修改最后一个数字大小，100为原百分比。
+;;改动该值会影响启动时候的窗口大小
+;;(set-face-attribute 'default nil :height 100)
+
 ;;脚本总文件夹位置。总是在.emacs文件最前面
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
 ;;开启剪贴后删除当前set-mark内容
