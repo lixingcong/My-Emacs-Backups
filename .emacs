@@ -1,3 +1,5 @@
+;;行号左对齐，占位符2个，"-2d"其后紧跟一个空格隔开代码
+(setq linum-format "%-2d ") 
 ;;默认启动字体大小，修改最后一个数字大小，100为原百分比。
 ;;改动该值会影响启动时候的窗口大小
 ;;(set-face-attribute 'default nil :height 100)
