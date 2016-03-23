@@ -6,6 +6,35 @@
 
 ;;脚本总文件夹位置。总是在.emacs文件最前面
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
+
+;;WEB Mode插件 http://web-mode.org/
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.js?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.xml?\\'" . web-mode))
+;;web mode自动配对
+ (setq web-mode-enable-auto-closing t)
+ (setq web-mode-enable-auto-pairing t)
+;;web-mode 元素对齐
+(setq web-mode-markup-indent-offset 4)
+(setq web-mode-css-indent-offset 4)
+(setq web-mode-code-indent-offset 4)
+;;web-mode 颜色
+(setq web-mode-enable-css-colorization t)
+(setq web-mode-enable-current-column-highlight t)
+;;(set-face-attribute 'web-mode-html-tag-face nil :foreground "red3")
+;;web-mode显示配对范围上下文
+(setq web-mode-enable-current-element-highlight t)
+(setq web-mode-enable-current-column-highlight t)
+
 ;;开启剪贴后删除当前set-mark内容
 (delete-selection-mode)
 ;;上一行下一行。总是在.emacs文件最前面
@@ -214,6 +243,13 @@
 ;;(ac-set-trigger-key "TAB")  
 (global-set-key (kbd "M-v")'ac-complete)  
 ;;(define-key ac-mode-map  [(control tab)] 'auto-complete)
+
+;;加入web-mode的Auto-complete插件，配合AC使用
+(setq web-mode-ac-sources-alist
+  '(("css" . (ac-source-css-property))
+    ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+    
+
 (defun ska-point-to-register()
   "Store cursorposition _fast_ in a register.
 Use ska-jump-to-register to jump back to the stored
