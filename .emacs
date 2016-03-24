@@ -7,6 +7,7 @@
 ;;脚本总文件夹位置。总是在.emacs文件最前面
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
 
+;;2016.3
 ;;WEB Mode插件 http://web-mode.org/
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -21,8 +22,8 @@
 (add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.xml?\\'" . web-mode))
 ;;web mode自动配对
- (setq web-mode-enable-auto-closing t)
- (setq web-mode-enable-auto-pairing t)
+(setq web-mode-enable-auto-closing t)
+(setq web-mode-enable-auto-pairing t)
 ;;web-mode 元素对齐
 (setq web-mode-markup-indent-offset 4)
 (setq web-mode-css-indent-offset 4)
@@ -30,7 +31,7 @@
 ;;web-mode 颜色
 (setq web-mode-enable-css-colorization t)
 (setq web-mode-enable-current-column-highlight t)
-;;(set-face-attribute 'web-mode-html-tag-face nil :foreground "red3")
+(set-face-attribute 'web-mode-html-tag-face nil :foreground "red3")
 ;;web-mode显示配对范围上下文
 (setq web-mode-enable-current-element-highlight t)
 (setq web-mode-enable-current-column-highlight t)
@@ -42,7 +43,6 @@
 (global-set-key (kbd "M-j") 'next-line)
 
 ;;2016.1
-
 ;;python缩进4个空格
 (add-hook 'python-mode-hook
       (lambda ()
