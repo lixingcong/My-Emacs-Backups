@@ -25,9 +25,9 @@
 (setq web-mode-enable-auto-closing t)
 (setq web-mode-enable-auto-pairing t)
 ;;web-mode 元素对齐
-(setq web-mode-markup-indent-offset 4)
-(setq web-mode-css-indent-offset 4)
-(setq web-mode-code-indent-offset 4)
+(setq web-mode-markup-indent-offset 2)
+(setq web-mode-css-indent-offset 2)
+(setq web-mode-code-indent-offset 2)
 ;;web-mode 颜色
 (setq web-mode-enable-css-colorization t)
 (setq web-mode-enable-current-column-highlight t)
