@@ -493,7 +493,8 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-(setq frame-title-format "黎醒聪@%b")
+;;标题栏显示文件名
+(setq frame-title-format "黎醒聪@%f")
 (setq default-fill-column 80)
 (global-font-lock-mode t)
 ;;调试设置
