@@ -7,6 +7,9 @@
 ;;脚本总文件夹位置。总是在.emacs文件最前面
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
 
+;;默认为utf-8 no BOM 编码格式
+(prefer-coding-system 'utf-8)
+
 ;;2016.3
 ;;WEB Mode插件 http://web-mode.org/
 (require 'web-mode)
@@ -513,7 +516,7 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 (setq display-time-24hr-format t)
 (setq display-time-day-and-date t)
 (setq display-time-interval 10)
-(set-fontset-font "fontset-default" 'gb18030' ("Droid Sans Fallback" . "unicode-bmp"))
+(set-fontset-font "fontset-default" 'unicode' ("Droid Sans Fallback" . "unicode-bmp"))
 (require 'linum)
 (setq linum-mode t)
 (global-linum-mode 1)
