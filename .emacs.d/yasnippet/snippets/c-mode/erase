@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: .erase() 
+# key: erase()
+# --
+erase();
+$0

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: isdigit
+# key: isdigit()
+# --
+isdigit(${1:})$0

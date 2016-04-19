@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: puts
+# key: puts
+# --
+${1:puts("ok");}
+${2:cout<<"ok\n";}

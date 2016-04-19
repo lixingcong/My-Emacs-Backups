@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: fclose 
+# key: fclose()
+# --
+fclose(${*FILE});

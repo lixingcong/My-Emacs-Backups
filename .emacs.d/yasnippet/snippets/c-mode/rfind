@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: .rfind() 
+# key: rfind()
+# --
+rfind(${});

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: .push_back() 
+# key: push_back()
+# --
+push_back(${what?});$0

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: cmp(priority)
+# key: cmp(priority)
+# --
+struct cmp
+{bool operator()(const ${1:int}& a, const ${2:int}& b)const{return a${3:>}b;}};
+//return,如果a>b，是建成小堆，权重小的优先

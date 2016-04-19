@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: stack
+# key: stack<>
+# --
+stack<${1:type}> ${2:name};
