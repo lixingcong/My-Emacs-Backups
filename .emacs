@@ -97,6 +97,7 @@
 
 ;;隐藏菜单栏
 (menu-bar-mode -1)
+(tool-bar-mode -1)
 ;; 关闭启动画面
 (setq inhibit-startup-message t)
 ;;到达某一行
