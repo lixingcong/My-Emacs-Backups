@@ -10,6 +10,6 @@ Add Vim configure files
 
 ## Preview
 
-![](.emacs.d/site-lisp/preview.png) 
+![](preview_emacs.png) 
 
-![](.emacs.d/site-lisp/preview_vim.png) 
+![](preview_vim.png) 
