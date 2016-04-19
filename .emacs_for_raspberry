@@ -1,39 +1,39 @@
-;;×ó²àÀ¸µÄĞĞºÅÓë´úÂë¼ä¾à
+;;å·¦ä¾§æ çš„è¡Œå·ä¸ä»£ç é—´è·
 (set-fringe-mode '(1 . 1))
 
-;;½Å±¾×ÜÎÄ¼ş¼ĞÎ»ÖÃ
-(add-to-list 'load-path "~/.emacs.d/site-lisp")
+;;è„šæœ¬æ€»æ–‡ä»¶å¤¹ä½ç½®
+(add-to-list 'load-path "~/.emacs.d/lisp")
 
-;;ÔÚM-xÃüÁî½çÃæ²¹È«º¯ÊıÌáÊ¾£¬ÒÀÀµmy-icomplete+.elºÍicomplete-settings.el
-(require 'my-icomplete+)
+;;åœ¨M-xå‘½ä»¤ç•Œé¢è¡¥å…¨å‡½æ•°æç¤ºï¼Œä¾èµ–my-icomplete+.elå’Œicomplete-settings.el
+(require 'icomplete+)
 (require 'icomplete-settings)
 
-;; Ò³ÃæÆ½»¬¹ö¶¯£¬scroll-margin 5 ¿¿½üÆÁÄ»±ßÑØ3ĞĞÊ±¿ªÊ¼¹ö¶¯£¬¿ÉÒÔºÜºÃµÄ¿´µ½ÉÏÏÂÎÄ¡£
+;; é¡µé¢å¹³æ»‘æ»šåŠ¨ï¼Œscroll-margin 5 é è¿‘å±å¹•è¾¹æ²¿3è¡Œæ—¶å¼€å§‹æ»šåŠ¨ï¼Œå¯ä»¥å¾ˆå¥½çš„çœ‹åˆ°ä¸Šä¸‹æ–‡ã€‚
 (setq scroll-margin 5 scroll-conservatively 10000)
 
 (setq kill-do-not-save-duplicates t)
-;; ÉèÖÃÕ³Ìù»º³åÌõÄ¿ÊıÁ¿  
+;; è®¾ç½®ç²˜è´´ç¼“å†²æ¡ç›®æ•°é‡  
 (setq kill-ring-max 200)
-;; ÏÔÊ¾ÁĞºÅ
+;; æ˜¾ç¤ºåˆ—å·
 (setq column-number-mode t)
-;; ¸ßÁÁËÑË÷  
+;; é«˜äº®æœç´¢  
 (setq search-highlight t)  
 (setq query-replace-highlight t)  
-;; ÏÈ¸ñÊ½»¯ÔÙ²¹È«
+;; å…ˆæ ¼å¼åŒ–å†è¡¥å…¨
 (setq tab-always-indent 'complete)
-;; EmacsÕÒ²»µ½ºÏÊÊµÄÄ£Ê½Ê±£¬È±Ê¡Ê¹ÓÃtext-mode
+;; Emacsæ‰¾ä¸åˆ°åˆé€‚çš„æ¨¡å¼æ—¶ï¼Œç¼ºçœä½¿ç”¨text-mode
 (setq default-major-mode 'text-mode)
-;; ÔÚfringeÉÏÏÔÊ¾Ò»¸öĞ¡¼ıÍ·Ö¸Ê¾µ±Ç°bufferµÄ±ß½ç
+;; åœ¨fringeä¸Šæ˜¾ç¤ºä¸€ä¸ªå°ç®­å¤´æŒ‡ç¤ºå½“å‰bufferçš„è¾¹ç•Œ
 ;;(setq-default indicate-buffer-boundaries 'left)
-;;ÎªÖØÃûµÄbufferÔÚÇ°Ãæ¼ÓÉÏÆä¸¸Ä¿Â¼µÄÃû×ÖÀ´ÈÃbufferµÄÃû×ÖÇø·Ö¿ªÀ´£¬¶ø²»ÊÇµ¥´¿µÄ¼ÓÒ»¸öÃ»ÓĞÌ«¶àÒâÒåµÄĞòºÅ
+;;ä¸ºé‡åçš„bufferåœ¨å‰é¢åŠ ä¸Šå…¶çˆ¶ç›®å½•çš„åå­—æ¥è®©bufferçš„åå­—åŒºåˆ†å¼€æ¥ï¼Œè€Œä¸æ˜¯å•çº¯çš„åŠ ä¸€ä¸ªæ²¡æœ‰å¤ªå¤šæ„ä¹‰çš„åºå·
 ;;(require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
-;; ²»ÒªÉÁË¸¹â±ê, ·³²»·³°¡
+;; ä¸è¦é—ªçƒå…‰æ ‡, çƒ¦ä¸çƒ¦å•Š
 (blink-cursor-mode -1)
 
 (global-set-key [(f10)] 'menu-bar-mode)
 (setq gdb-many-windows t)
-;;±Ê¼Ç¹¦ÄÜ£¬Ìí¼Ó±Ê¼Çºó°´next-error¼´¿ÉÌøÖÁÕâÀï
+;;ç¬”è®°åŠŸèƒ½ï¼Œæ·»åŠ ç¬”è®°åæŒ‰next-errorå³å¯è·³è‡³è¿™é‡Œ
 (defun add-code-review-note ()
   "Add note for current file and line number"
   (interactive)
@@ -49,9 +49,9 @@
 	(if(/= (current-column) 0)
 		(newline))
 	(insert file-name":"(number-to-string file-line)": ")))
-;;Ìí¼ÓÊéÇ©¹¦ÄÜ
+;;æ·»åŠ ä¹¦ç­¾åŠŸèƒ½
 ;;(global-set-key (kbd "M-h") 'add-code-review-note) 
-;;¸ù¾İÓï·¨Ëõ½ø
+;;æ ¹æ®è¯­æ³•ç¼©è¿›
 (global-set-key (kbd "M-o") 'indent-according-to-mode) 
 
 (defun toggle-window-split ()
@@ -78,20 +78,20 @@
           (set-window-buffer (next-window) next-win-buffer)
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
-;;ÉèÖÃ´°¸ñ´¹Ö±»¹ÊÇË®Æ½(Ê×ÏÈ°´c-x 2£¬ÇÒÓĞ¶à¸ö´°¿Ú)
+;;è®¾ç½®çª—æ ¼å‚ç›´è¿˜æ˜¯æ°´å¹³(é¦–å…ˆæŒ‰c-x 2ï¼Œä¸”æœ‰å¤šä¸ªçª—å£)
 (global-set-key (kbd "M-3") 'toggle-window-split) 
 (require 'ahei-misc)
 (require 'eval-after-load)
 
-;;Õâ¸ö²å¼ş¿ÉÒÔÊó±ê¹öÂÖµ÷Õû×Ó´°¿ÚµÄ¿í¶ÈºÍ¸ß¶È
+;;è¿™ä¸ªæ’ä»¶å¯ä»¥é¼ æ ‡æ»šè½®è°ƒæ•´å­çª—å£çš„å®½åº¦å’Œé«˜åº¦
 (require 'doremi)
 (require 'doremi-cmd)
-;;¿ì½İ¼ü µ÷Õû×Ó´°¿Ú ¸ß¶È ¿í¶È
+;;å¿«æ·é”® è°ƒæ•´å­çª—å£ é«˜åº¦ å®½åº¦
 (global-set-key (kbd "C--") 'doremi-window-height+) 
 (global-set-key (kbd "C-=") 'doremi-window-width+)
 
 
-;;È¡Ïû24°æ±¾º¯ÊıÈ±ÉÙÌáÊ¾£ºmake-local-hook
+;;å–æ¶ˆ24ç‰ˆæœ¬å‡½æ•°ç¼ºå°‘æç¤ºï¼šmake-local-hook
 (defalias 'make-local-hook
   (if (featurep 'xemacs)
       'make-local-hook
@@ -99,30 +99,30 @@
 (require 'util)
 
 (require 'cursor-chg)
-;;¹â±ê×Ô¶¯¸Ä±ä£¬ĞèÒªcursor-chg.el,cursor-change.el
+;;å…‰æ ‡è‡ªåŠ¨æ”¹å˜ï¼Œéœ€è¦cursor-chg.el,cursor-change.el
 (require 'cursor-change)  
 (cursor-change-mode 1)
 
-;;ÊÇ·ñ¿ªÆôviÄ£Ê½£¿
+;;æ˜¯å¦å¼€å¯viæ¨¡å¼ï¼Ÿ
 (require 'emaci)
 (require 'emaci-settings)
 (global-set-key [(f11)] 'emaci-mode)
-;;Êó±ê±äĞÎ
+;;é¼ æ ‡å˜å½¢
 (require 'cursor-change)
 ;;(require 'ascii)
-;;°´alt-l×¢ÊÍµ±Ç°ĞĞ£¬¿ìËÙÆÁ±Î£¬°´alt-;¸øµ±Ç°ĞĞÎ²¼Ó×¢ÊÍ
-;;°´alt-vÑ¡Ôñ×Ô¶¯²¹È«£¬tabÖ»ÄÜÑ¡ÔñµÚÒ»¸ö
-;;°´alt-r·­¶¯Êó±ê£¬°´alt-e±éÀúÃ¿ĞĞÎ²°Í
-;;ÔËĞĞspeedbar¿ÉÒÔ´ò¿ªÎÄ¼ş¹ÜÀíÆ÷
-;;Ê±¼ä´ÁÉèÖÃ(time-stamp)£¬Éè¶¨ÎÄµµÉÏ´Î±£´æµÄĞÅÏ¢iiii
-;;Ö»ÒªÀïÔÚÄãµÃÎÄµµÀïÓĞTime-stamp:µÄÉèÖÃ£¬¾Í»á×Ô¶¯±£´æÊ±¼ä´Á
-;;ÆôÓÃtime-stamp
+;;æŒ‰alt-læ³¨é‡Šå½“å‰è¡Œï¼Œå¿«é€Ÿå±è”½ï¼ŒæŒ‰alt-;ç»™å½“å‰è¡Œå°¾åŠ æ³¨é‡Š
+;;æŒ‰alt-vé€‰æ‹©è‡ªåŠ¨è¡¥å…¨ï¼Œtabåªèƒ½é€‰æ‹©ç¬¬ä¸€ä¸ª
+;;æŒ‰alt-rç¿»åŠ¨é¼ æ ‡ï¼ŒæŒ‰alt-eéå†æ¯è¡Œå°¾å·´
+;;è¿è¡Œspeedbarå¯ä»¥æ‰“å¼€æ–‡ä»¶ç®¡ç†å™¨
+;;æ—¶é—´æˆ³è®¾ç½®(time-stamp)ï¼Œè®¾å®šæ–‡æ¡£ä¸Šæ¬¡ä¿å­˜çš„ä¿¡æ¯iiii
+;;åªè¦é‡Œåœ¨ä½ å¾—æ–‡æ¡£é‡Œæœ‰Time-stamp:çš„è®¾ç½®ï¼Œå°±ä¼šè‡ªåŠ¨ä¿å­˜æ—¶é—´æˆ³
+;;å¯ç”¨time-stamp
 (setq time-stamp-active t)
-;;È¥µôtime-stampµÄ¾¯¸æ£¿
+;;å»æ‰time-stampçš„è­¦å‘Šï¼Ÿ
 (setq time-stamp-warn-inactive t)
-;;ÉèÖÃtime-stampµÄ¸ñÊ½£¬ÎÒÈçÏÂµÄ¸ñÊ½ËùµÃµÄÒ»¸öÀı×Ó£º
-(setq time-stamp-format " %f %04yÄê%02mÔÂ%02dÈÕ %02H:%02M:%02S ")
-;;½«ĞŞ¸ÄÊ±¼ä´ÁÌí¼Óµ½±£´æÎÄ¼şµÄ¶¯×÷Àï¡£
+;;è®¾ç½®time-stampçš„æ ¼å¼ï¼Œæˆ‘å¦‚ä¸‹çš„æ ¼å¼æ‰€å¾—çš„ä¸€ä¸ªä¾‹å­ï¼š
+(setq time-stamp-format " %f %04yå¹´%02mæœˆ%02dæ—¥ %02H:%02M:%02S ")
+;;å°†ä¿®æ”¹æ—¶é—´æˆ³æ·»åŠ åˆ°ä¿å­˜æ–‡ä»¶çš„åŠ¨ä½œé‡Œã€‚
 (add-hook 'write-file-hooks 'time-stamp)
 
 (defun ska-point-to-register()
@@ -140,36 +140,36 @@ that was stored with ska-point-to-register."
   (let ((tmp (point-marker)))
         (jump-to-register 8)
         (set-register 8 tmp)))
-;;ÉèÖÃÄ³¸öµãÀ´»ØÌø¶¯¹â±ê
+;;è®¾ç½®æŸä¸ªç‚¹æ¥å›è·³åŠ¨å…‰æ ‡
 (global-set-key (kbd "M-2") 'ska-jump-to-register)
 (global-set-key (kbd "M-1") 'ska-point-to-register)
 ;;(setq default-directory "F:/work/dev_cpp/temp/")
 (setq default-directory "~/code/python/")
-;;Ñ¡ÖĞÒ»¿é´úÂë£¬°´ Ctrl-Alt-\ ¶ÔÕâ¿é´úÂë½øĞĞ¸ñÊ½»¯¡£
-;;µ÷ÊÔÄ£Ê½ÏÂ f3ÒÆ³ı¶Ïµã f4ÉèÖÃ¶Ïµã f5.gud-go  f6.gud-finish  f7.gud-next f8.gud-step  
-;;gud-next ÏÂÒ»ĞĞ(Ìø¹ıº¯Êı) gud-step ²½Èë(½øÈëº¯Êı) gud-finish Ìø³öº¯Êı
-;;¿ÉÒÔÓÃgdbÏÂM-xÔËĞĞgud-tooltip-mode¿ªÆôºó½«Êó±êÖ¸ÕëÍ£ÁôÔÚ±äÁ¿ÃûÉÏÏÔÊ¾
-;;¿ÉÒÔÓÃgdbÏÂM-xÔËĞĞgdb-many-windows´ò¿ª¶à´°¿ÚÏÔÊ¾
-;;ÔÄ¶ÁÄ£Ê½,ÒÀÀµahei-misc.el¡£ºÍeval-after-load¡£util.el¡£emaci.el
-;;½øÈëemaci-modeºó, ºÍviÀàËÆ, hjklÉÏÏÂ×óÓÒÒÔ×Ö·ûµ¥Î»ÒÆ¶¯¹â±ê
-;;f, bÇ°½øºÍºóÍËÒ»¸öµ¥´Ê
-;;I»Øµ½ĞĞÊ×²¢ÇÒÍË³öemaci-mode, A»Øµ½ĞĞÎ²²¢ÇÒÍË³öemaci-mode
-;;uÏòÉÏ¹ö°ëÆÁ, SPCÏòÏÂ¹ö°ëÆÁ, wÏòÉÏ¹öÒ»ÆÁ, dÏòÏÂ¹öÒ»ÆÁ
-;;<ºÍ>»Øµ½bufferÍ·ºÍbufferÎ² gÒ²ÊÇ»Øµ½bufferÍ·, 
-;;BÖ´ĞĞeval-buffer
-;;1×î´ó»¯µ±Ç°window, 2°Ñµ±Ç°buffer´¹Ö±·Ö³ÉÁ½°ë£¬3°Ñµ±Ç°bufferË®Æ½·Ç³£Á½°ë£¬qÍË³öemaci-mode
+;;é€‰ä¸­ä¸€å—ä»£ç ï¼ŒæŒ‰ Ctrl-Alt-\ å¯¹è¿™å—ä»£ç è¿›è¡Œæ ¼å¼åŒ–ã€‚
+;;è°ƒè¯•æ¨¡å¼ä¸‹ f3ç§»é™¤æ–­ç‚¹ f4è®¾ç½®æ–­ç‚¹ f5.gud-go  f6.gud-finish  f7.gud-next f8.gud-step  
+;;gud-next ä¸‹ä¸€è¡Œ(è·³è¿‡å‡½æ•°) gud-step æ­¥å…¥(è¿›å…¥å‡½æ•°) gud-finish è·³å‡ºå‡½æ•°
+;;å¯ä»¥ç”¨gdbä¸‹M-xè¿è¡Œgud-tooltip-modeå¼€å¯åå°†é¼ æ ‡æŒ‡é’ˆåœç•™åœ¨å˜é‡åä¸Šæ˜¾ç¤º
+;;å¯ä»¥ç”¨gdbä¸‹M-xè¿è¡Œgdb-many-windowsæ‰“å¼€å¤šçª—å£æ˜¾ç¤º
+;;é˜…è¯»æ¨¡å¼,ä¾èµ–ahei-misc.elã€‚å’Œeval-after-loadã€‚util.elã€‚emaci.el
+;;è¿›å…¥emaci-modeå, å’Œviç±»ä¼¼, hjklä¸Šä¸‹å·¦å³ä»¥å­—ç¬¦å•ä½ç§»åŠ¨å…‰æ ‡
+;;f, bå‰è¿›å’Œåé€€ä¸€ä¸ªå•è¯
+;;Iå›åˆ°è¡Œé¦–å¹¶ä¸”é€€å‡ºemaci-mode, Aå›åˆ°è¡Œå°¾å¹¶ä¸”é€€å‡ºemaci-mode
+;;uå‘ä¸Šæ»šåŠå±, SPCå‘ä¸‹æ»šåŠå±, wå‘ä¸Šæ»šä¸€å±, då‘ä¸‹æ»šä¸€å±
+;;<å’Œ>å›åˆ°bufferå¤´å’Œbufferå°¾ gä¹Ÿæ˜¯å›åˆ°bufferå¤´, 
+;;Bæ‰§è¡Œeval-buffer
+;;1æœ€å¤§åŒ–å½“å‰window, 2æŠŠå½“å‰bufferå‚ç›´åˆ†æˆä¸¤åŠï¼Œ3æŠŠå½“å‰bufferæ°´å¹³éå¸¸ä¸¤åŠï¼Œqé€€å‡ºemaci-mode
 ;;(require 'emaci-settings)
-;; Ò»Ğ©»ù±¾µÄĞ¡º¯Êı
+;; ä¸€äº›åŸºæœ¬çš„å°å‡½æ•°
 ;;(require 'ahei-misc)
-;; ÀûÓÃ`eval-after-load'¼Ó¿ìÆô¶¯ËÙ¶ÈµÄ¿â
-;; ÓÃeval-after-load±ÜÃâ²»±ØÒªµÄelisp°üµÄ¼ÓÔØ
+;; åˆ©ç”¨`eval-after-load'åŠ å¿«å¯åŠ¨é€Ÿåº¦çš„åº“
+;; ç”¨eval-after-loadé¿å…ä¸å¿…è¦çš„elispåŒ…çš„åŠ è½½
 ;; http://emacser.com/eval-after-load.htm
 (require 'eval-after-load)
 
 
-;;ÏÔÊ¾¸ßÁÁµ±Ç°ĞĞ
+;;æ˜¾ç¤ºé«˜äº®å½“å‰è¡Œ
 ;;(global-hl-line-mode 1)
-;;±ä»»3¸ö´°¿ÚÎ»ÖÃ,½öÔÚC-x 3ÖĞÊ¹ÓÃ
+;;å˜æ¢3ä¸ªçª—å£ä½ç½®,ä»…åœ¨C-x 3ä¸­ä½¿ç”¨
 (defun switch-windows-buffer ()
   (interactive)
   (let ((this-buffer (window-buffer)))
@@ -179,7 +179,7 @@ that was stored with ska-point-to-register."
     )
 )
 ;;(global-set-key (kbd "M-6") 'switch-windows-buffer)
-;;´ò¿ªµ±Ç°ÎÄ¼ş¼ĞµÄÖÕ¶Ë
+;;æ‰“å¼€å½“å‰æ–‡ä»¶å¤¹çš„ç»ˆç«¯
 (defun popup-term ()
   (interactive)
   (apply 'start-process "terminal" nil popup-terminal-command)
@@ -187,64 +187,64 @@ that was stored with ska-point-to-register."
 (setq popup-terminal-command '("gnome-terminal"))
 (global-set-key (kbd "C-M-c") 'popup-term)
 
-;;¹Ø±ÕÌáÊ¾Òô
+;;å…³é—­æç¤ºéŸ³
 (setq ring-bell-function 'ignore)
 
 (global-set-key (kbd "C-M-x") 'gdb)
-;;ÉèÖÃÄ¬ÈÏµÄ±àÒëÑ¡Ïî
+;;è®¾ç½®é»˜è®¤çš„ç¼–è¯‘é€‰é¡¹
 (setq compile-command "g++ -g -o 1 ")
 ;;(setq compile-command "javac ")
 ;;(setq compile-command "c51.bat ")
-;;²åÈëÒ»ĞĞ
+;;æ’å…¥ä¸€è¡Œ
 (global-set-key (kbd "M-n") '(lambda () 
 (interactive) 
 (move-end-of-line 1) 
 (newline-and-indent)))
-;;±àÒë
+;;ç¼–è¯‘
 (global-set-key (kbd "C-M-z") 'compile)
-;;´íÎóĞÅÏ¢ÏÔÊ¾ÔÚ»ØÏÔÇø
+;;é”™è¯¯ä¿¡æ¯æ˜¾ç¤ºåœ¨å›æ˜¾åŒº
 ;;(condition-case err(progn(require 'xxx) )(error(message "Can't load xxx-mode %s" (cdr err))))
-;;²»²úÉúÁÙÊ±ÎÄ¼ş
+;;ä¸äº§ç”Ÿä¸´æ—¶æ–‡ä»¶
 (setq-default make-backup-files nil)
-;;É¾³ıµ±Ç°ĞĞ
+;;åˆ é™¤å½“å‰è¡Œ
 (global-set-key (kbd "M-i") 'kill-line)
-;;¶¨Î»µ½ÏÂÒ»¸ö,ÉÏÒ»¸ö±àÒë´íÎó
+;;å®šä½åˆ°ä¸‹ä¸€ä¸ª,ä¸Šä¸€ä¸ªç¼–è¯‘é”™è¯¯
 (global-set-key (kbd "M-q") 'next-error)
 (global-set-key (kbd "M-a") 'previous-error)
-;;Ìí¼Ó×Ô¶¯²¹È«º¯ÊıÔ­ĞÍ¹¦ÄÜ
+;;æ·»åŠ è‡ªåŠ¨è¡¥å…¨å‡½æ•°åŸå‹åŠŸèƒ½
 
-;;ÏÔÊ¾ĞĞºÅ
+;;æ˜¾ç¤ºè¡Œå·
 (global-linum-mode)
-;;ÉèÖÃ±ê¼Çc-m
+;;è®¾ç½®æ ‡è®°c-m
 (global-set-key (kbd "C-i") 'set-mark-command)
-;;ÉèÖÃ²¹È«¹¦ÄÜ
+;;è®¾ç½®è¡¥å…¨åŠŸèƒ½
 ;;(global-set-key (kbd "M-m") 'dabbrev-expand)
-;;À¨ºÅÌø×ª
+;;æ‹¬å·è·³è½¬
 (global-set-key (kbd "C-7") 'forward-sexp)
 (global-set-key (kbd "C-8") 'backward-sexp)
-;;×Ö·û×óÒ»¸öÓÒÒ»¸ö
+;;å­—ç¬¦å·¦ä¸€ä¸ªå³ä¸€ä¸ª
 (global-set-key (kbd "C-k") 'backward-char)
 (global-set-key (kbd "C-j") 'forward-char)
-;;ÉÏÒ»ĞĞÏÂÒ»ĞĞ
+;;ä¸Šä¸€è¡Œä¸‹ä¸€è¡Œ
 (global-set-key (kbd "M-k") 'previous-line)
 (global-set-key (kbd "M-j") 'next-line)[(f8)]
-;;ÉÏÒ³ÏÂÒ³
+;;ä¸Šé¡µä¸‹é¡µ
 (global-set-key (kbd "M-7") 'scroll-up)
 (global-set-key (kbd "M-8") 'scroll-down)
-;;³·Ïú
+;;æ’¤é”€
 (global-set-key (kbd "C-z") 'undo)
-;;°´ÏÂC-yºó£¬°´´Ë¼ü£¬ÇĞ»»Õ³ÌùµÄÄÚÈİ
-;;Òş²Ø²Ëµ¥À¸
+;;æŒ‰ä¸‹C-yåï¼ŒæŒ‰æ­¤é”®ï¼Œåˆ‡æ¢ç²˜è´´çš„å†…å®¹
+;;éšè—èœå•æ 
 (menu-bar-mode -1)
-;; ¹Ø±ÕÆô¶¯»­Ãæ
+;; å…³é—­å¯åŠ¨ç”»é¢
 (setq inhibit-startup-message t)
-;;µ½´ïÄ³Ò»ĞĞ
+;;åˆ°è¾¾æŸä¸€è¡Œ
 (global-set-key (kbd "M-g") 'goto-line)
-;;´úÂëÕÛµş:
+;;ä»£ç æŠ˜å :
 (add-hook 'c-mode-hook 'hs-minor-mode)
 (add-hook 'c++-mode-hook 'hs-minor-mode) 
 
-;;¿ìËÙ¿½±´ÕûÒ»ĞĞ,Êó±ê¶¨Î»µ½ĞĞÊ×¼´¿É¿½±´
+;;å¿«é€Ÿæ‹·è´æ•´ä¸€è¡Œ,é¼ æ ‡å®šä½åˆ°è¡Œé¦–å³å¯æ‹·è´
 (global-set-key (kbd "M-m") 'qiang-copy-line)
 (defun qiang-comment-dwim-line (&optional arg)
   "Replacement for the comment-dwim command.
@@ -257,7 +257,7 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
       (comment-or-uncomment-region (line-beginning-position) (line-end-position))
     (comment-dwim arg)))
 
-;;¿ìËÙ×¢ÊÍÕû¾ä°´alt+l
+;;å¿«é€Ÿæ³¨é‡Šæ•´å¥æŒ‰alt+l
 (global-set-key "\M-l" 'qiang-comment-dwim-line)
 
 (setq gdb-many-windows t)
@@ -276,7 +276,7 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 (auto-save-mode nil)
 (setq auto-save-default nil)
 
-;; ÉèÖÃÖÇÄÜËõ½ø
+;; è®¾ç½®æ™ºèƒ½ç¼©è¿›
 (setq indent-tabs-mode nil)
 (setq default-tab-width 4)
 (setq tab-width 4)
@@ -326,7 +326,7 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 ;;(require 'php-mode)
-;; ÉèÖÃ¹â±êÎªÊúÏß
+;; è®¾ç½®å…‰æ ‡ä¸ºç«–çº¿
 ;;(setq-default cursor-type 'bar)
 
 ;;======================    code setting        =========================
