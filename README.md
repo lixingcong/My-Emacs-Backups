@@ -1,14 +1,11 @@
-# My Configures Backup for Emacs 24.3 and Vim 7.4
+# My Configures Backup for Emacs 24.5 and Vim 7.4
 
-2015-08
+Compile your Emacs 24.5 to enjoy the lastest features.
 
-Works on ubuntu 14.04 x64 and raspiberry
+Do install it via APT source for the reason that the APT-emcas-version is out of date!
 
-2016-03
-
-Add Vim configure files
-
-## Preview
+[How to compile Emacs](http://lixingcong.github.io/2016/04/19/compile-emacs-on-linux/)
+[GNU Emacs source code](http://ftp.gnu.org/gnu/emacs/)
 
 ![](preview_emacs.png) 
 
