@@ -5,6 +5,7 @@
 ;;将字体Droid Sans Fallback替换为Microsoft YaHei
 ;;将cmd命令替换为"cmd" "/c" "start"
 ;;将工作目录替换为Z:\
+;;将text-scale-increase字体缩放调整为<C-wheel-down>
 
 ;;脚本总文件夹位置。总是在.emacs文件最前面
 (add-to-list 'load-path "~/.emacs.d/lisp")
@@ -157,8 +158,8 @@
 
 ;;滚轮调节字体大小
 ;; For linux only, use <C-wheel-up> on windows
-(global-set-key (kbd "<C-mouse-4>") 'text-scale-increase)
-(global-set-key (kbd "<C-mouse-5>") 'text-scale-decrease)
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 
 ;;快速注释整句按alt+l
 (defun qiang-comment-dwim-line (&optional arg)
