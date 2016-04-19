@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: vector
-# key: vec
-# --
-vector<${1:type?}> ${2:var?};

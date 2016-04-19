@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: for
-# key: for
-# --
-FOR(FROM ${1:waht?} TO ${2:what?} ${3:UNTIL?}) 
-    {
-        $0
-    }

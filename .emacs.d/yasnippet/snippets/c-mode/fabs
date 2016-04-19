@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: fabs
-# key: fabs()
-# --
-fabs(${1:});$0

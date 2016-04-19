@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: stable_sort
-# key: stable_sort
-# --
-stable_sort(${1:vector.begin()},${2:myvector.end()},${3:compare_as_ints});	//include <algorithm>

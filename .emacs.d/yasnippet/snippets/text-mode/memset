@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: memset()
-# key: memset()
-# --
-memset(${1:*a},${2:value});

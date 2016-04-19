@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: .c_str() 
-# key: .c_str()
-# --
-.c_str()$0

@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: iiii
-# key: iiii
-# --
-#!/bin/bash
-# Time-stamp: <>
-# ${1:Description}
-$0

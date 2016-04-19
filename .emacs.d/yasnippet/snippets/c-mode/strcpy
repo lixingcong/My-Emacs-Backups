@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: strcpy
-# key: strcpy
-# --
-strcpy(${1:*dest},${2:*source});

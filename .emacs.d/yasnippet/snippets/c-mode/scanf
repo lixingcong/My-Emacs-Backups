@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: scan
-# key: scan
-# --
-scanf("${1:format string}",${2:to what?});
