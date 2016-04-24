@@ -493,6 +493,7 @@ that was stored with ska-point-to-register."
 		(define-key matlab-mode-map (kbd "C-j") nil)
 		(define-key matlab-mode-map (kbd "M-j") nil)
 		(define-key matlab-mode-map (kbd "M-c") nil)
+		(define-key matlab-mode-map (kbd "M-v") nil)
 		))
 
 ;;在electric-operator.el中最后的namespace中加入matlab的模式

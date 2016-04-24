@@ -278,7 +278,7 @@ additional cases as the need arrises."
   :group 'matlab
   :type 'boolean)
 
-(defcustom matlab-auto-fill t
+(defcustom matlab-auto-fill nil
   "*If true, set variable `auto-fill-function' to our function at startup."
   :group 'matlab
   :type 'boolean)
