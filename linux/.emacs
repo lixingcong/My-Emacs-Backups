@@ -288,6 +288,8 @@ that was stored with ska-point-to-register."
                 lisp-mode textile-mode markdown-mode tuareg-mode
                 js3-mode css-mode less-css-mode sql-mode
                 sql-interactive-mode
+				;;MATLAB
+				matlab-mode
                 inferior-emacs-lisp-mode))
   				(add-to-list 'ac-modes mode))
 
@@ -475,9 +477,16 @@ that was stored with ska-point-to-register."
 
 ;;matlab语法模式 https://github.com/pronobis/matlab-mode
 (require 'matlab)
-;;取消快捷键绑定上一页下一页
-(define-key matlab-mode-map (kbd "C-j") nil)
-(define-key matlab-mode-map (kbd "M-j") nil)
+;;绑定 matlab-mode 的Hook
+(add-hook 'matlab-mode-hook
+      (lambda ()
+		;;MATLAB不支持utf-8，故显示中文需要GBK编码
+		(set-buffer-file-coding-system 'gbk)
+		(define-key matlab-mode-map (kbd "C-j") nil)
+		(define-key matlab-mode-map (kbd "M-j") nil)
+		(define-key matlab-mode-map (kbd "M-c") nil)
+		))
+		
 ;;在electric-operator.el中最后的namespace中加入matlab的模式
 (add-hook 'matlab-mode-hook #'electric-operator-mode)
 
