@@ -11,6 +11,8 @@
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
 ;;运行speedbar可以打开文件管理器
+;;查看当前mode的Key Bindings，用于检测绑定冲突
+;;M-x describe-mode
 
 ;;取消24.3版本函数缺少提示：make-local-hook
 (defalias 'make-local-hook
@@ -481,6 +483,9 @@ that was stored with ska-point-to-register."
 
 ;;matlab语法模式 https://github.com/pronobis/matlab-mode
 (load-file "~/.emacs.d/lisp/matlab.el")
+;;取消快捷键绑定上一页下一页
+(define-key matlab-mode-map (kbd "C-j") nil)
+(define-key matlab-mode-map (kbd "M-j") nil)
 ;;在electric-operator.el中最后的namespace中加入matlab的模式
 (add-hook 'matlab-mode-hook #'electric-operator-mode)
 
