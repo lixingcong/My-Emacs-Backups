@@ -719,11 +719,13 @@ Using `cc-mode''s syntactic analysis."
                     )
 
 
-
-
+;; add by lixingcong: MATLAB
+(apply #'add-rules-for-mode 'matlab-mode prog-mode-rules)
 
 
 ) ; end of namespace
+
+
 
 (provide 'electric-operator)
 

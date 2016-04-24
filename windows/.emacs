@@ -47,7 +47,7 @@
              (indent-region (region-beginning) (region-end) nil))))))
 ;;----------------------    END    code setting    ---------------------
 
-;; 设置智能缩进
+;; 设置缩进为space only
 ;;(setq indent-tabs-mode nil)
 (setq default-tab-width 4)
 (setq tab-width 4)
@@ -406,6 +406,8 @@ that was stored with ska-point-to-register."
 (load-file "~/.emacs.d/lisp/dash.el")
 (load-file "~/.emacs.d/lisp/electric-operator.el")
 (global-set-key [(f12)] 'electric-operator-mode)
+;;若要指定某种mode开启electric-operator-mode,使用hook
+(add-hook 'python-mode-hook #'electric-operator-mode)
 
 
 ;;自动插入配对括号 emacs 24+内置该功能
@@ -467,23 +469,20 @@ that was stored with ska-point-to-register."
 ;;(set-face-attribute 'default nil :height 100)
 
 ;;回车自动对齐
-(defun set-newline-and-indent ()
-  (local-set-key (kbd "RET") 'newline-and-indent))
-(define-key global-map (kbd "RET") 'newline-and-indent)
+(electric-indent-mode 1)
 
 ;;选中代码后执行shitf-left或right
 (global-set-key (kbd "S-<left>") 'indent-rigidly-left-to-tab-stop)
 (global-set-key (kbd "S-<right>") 'indent-rigidly-right-to-tab-stop)
 
-;;MATLAB 源文件 关联到text模式
-(add-to-list 'auto-mode-alist '("\\.m\\'" . text-mode))
-
 ;;2016-4-18
 ;;默认为utf-8 no BOM 编码格式
 (prefer-coding-system 'utf-8)
 
-
-
+;;matlab语法模式 https://github.com/pronobis/matlab-mode
+(load-file "~/.emacs.d/lisp/matlab.el")
+;;在electric-operator.el中最后的namespace中加入matlab的模式
+(add-hook 'matlab-mode-hook #'electric-operator-mode)
 
 ;;===========================================================================
 ;;=============以下设置到文件末尾，不需更改====================================
