@@ -210,7 +210,7 @@
 (global-set-key (kbd "C-M-c") 'popup-term)
 
 ;;显示高亮当前行
-(global-hl-line-mode 1)
+;;(global-hl-line-mode 1)
 
 ;; 用eval-after-load避免不必要的elisp包的加载
 ;; http://emacser.com/eval-after-load.htm

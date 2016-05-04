@@ -721,6 +721,14 @@ Using `cc-mode''s syntactic analysis."
 
 ;; add by lixingcong: MATLAB
 (apply #'add-rules-for-mode 'matlab-mode prog-mode-rules)
+(add-rules-for-mode 'matlab-mode
+					(cons ".*" " .* ")
+					(cons "./" " ./ ")
+					(cons ".\\" " .\\ ")
+					(cons ".+" " .+ ")
+					(cons ".-" " .- ")
+					(cons ".*" " .* ")
+                    )
 
 
 ) ; end of namespace
