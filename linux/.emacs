@@ -494,11 +494,19 @@ that was stored with ska-point-to-register."
 ;;In Emacs 24, turn it on in all programming modes using prog-mode-hook.
 ;;(add-hook 'prog-mode-hook #'highlight-symbol-mode)
 
-;;自动上下文高亮(配合linkd-mode)
+;;自动上下文高亮,不可以全文搜索，只能在当前视窗中搜索上下文
 ;;https://marmalade-repo.org/packages/auto-highlight-symbol
 ;;快捷键 按Alt+left或者right导航到上一个/下一个
-(require 'auto-highlight-symbol)
-(global-auto-highlight-symbol-mode t)
+;;(require 'auto-highlight-symbol)
+;;(global-auto-highlight-symbol-mode t)
+
+
+;;自动上下文高亮，这个可以全文搜索。
+;;https://github.com/nschum/highlight-symbol.el
+(require 'highlight-symbol)
+(add-hook 'prog-mode-hook #'highlight-symbol-mode)
+(global-set-key [f3] 'highlight-symbol-next)
+(global-set-key [(shift f3)] 'highlight-symbol-prev)
 
 ;;linkd-mode，生成@的跳转：tag下面有star，逐级像xml那样
 (add-to-list 'load-path "~/.emacs.d/linkd")
