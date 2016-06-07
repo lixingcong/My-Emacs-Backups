@@ -40,7 +40,7 @@
              (indent-region (region-beginning) (region-end) nil))))))
 ;;----------------------    END    code setting    ---------------------
 
-;; 设置缩进为space only
+;; 设置缩进为tab
 ;;(setq indent-tabs-mode nil)
 (setq default-tab-width 4)
 (setq tab-width 4)
@@ -210,7 +210,7 @@
 (global-set-key (kbd "C-M-c") 'popup-term)
 
 ;;显示高亮当前行
-;;(global-hl-line-mode 1)
+(global-hl-line-mode 1)
 
 ;; 用eval-after-load避免不必要的elisp包的加载
 ;; http://emacser.com/eval-after-load.htm
@@ -225,7 +225,7 @@
 
 ;;设置默认工作目录
 ;;(setq default-directory "F:/work/dev_cpp/temp/")
-(setq default-directory "~/code/python/")
+(setq default-directory "/tmp/")
 
 
 ;;设置某个点来回跳动光标
@@ -489,6 +489,35 @@ that was stored with ska-point-to-register."
 		
 ;;在electric-operator.el中最后的namespace中加入matlab的模式
 (add-hook 'matlab-mode-hook #'electric-operator-mode)
+
+;; 2016-6-7高考（三周年）
+;;In Emacs 24, turn it on in all programming modes using prog-mode-hook.
+;;(add-hook 'prog-mode-hook #'highlight-symbol-mode)
+
+;;自动上下文高亮(配合linkd-mode)
+;;https://marmalade-repo.org/packages/auto-highlight-symbol
+;;快捷键 按Alt+left或者right导航到上一个/下一个
+(require 'auto-highlight-symbol)
+(global-auto-highlight-symbol-mode t)
+
+;;linkd-mode，生成@的跳转：tag下面有star，逐级像xml那样
+(add-to-list 'load-path "~/.emacs.d/linkd")
+(require 'linkd)
+(add-hook 'prog-mode-hook #'linkd-mode)
+;;icon目录
+(setq linkd-use-icons t )
+(setq linkd-icons-directory "~/.emacs.d/linkd/icons/")
+;;重定义各种垃圾快捷键
+(define-key linkd-overlay-map [mouse-2] nil)
+(define-key linkd-overlay-map [mouse-4] nil)
+(define-key linkd-overlay-map (kbd "b") nil)
+(define-key linkd-overlay-map (kbd "l") nil)
+(define-key linkd-overlay-map (kbd "[") nil)
+(define-key linkd-overlay-map (kbd "]") nil)
+(define-key linkd-map [mouse-4] nil)
+;;按鼠标前进后退键在相邻的结点游荡
+(define-key global-map [mouse-9] 'linkd-previous-link)
+(define-key global-map [mouse-8] 'linkd-next-link)
 
 
 

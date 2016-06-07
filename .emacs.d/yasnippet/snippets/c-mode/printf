@@ -2,4 +2,4 @@
 # name: printf
 # key: printf
 # --
-printf("${1:format string}",${2:array});
+printf("${1:format string}"$0);
