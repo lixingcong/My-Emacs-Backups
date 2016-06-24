@@ -19,27 +19,6 @@
     (declare (indent 1) (debug t))
     `(eval-after-load ,file '(progn ,@body))))
 
-;;======================    code setting        =========================
-(dolist (command '(yank yank-pop))
-  (eval
-   `(defadvice ,command (after indent-region activate)
-      (and (not current-prefix-arg)
-           (member major-mode
-                   '(emacs-lisp-mode
-                     lisp-mode
-                     clojure-mode
-                     php-mode
-                     scheme-mode
-                     haskell-mode
-                     ruby-mode
-                     rspec-mode
-                     ;;python-mode
-                     c-mode
-                     c++-mode))
-           (let ((mark-even-if-inactive transient-mark-mode))
-             (indent-region (region-beginning) (region-end) nil))))))
-;;----------------------    END    code setting    ---------------------
-
 ;; 设置缩进为tab
 ;;(setq indent-tabs-mode nil)
 (setq default-tab-width 4)
