@@ -4,4 +4,8 @@
 !.vimrc
 !.vim
 !.emacs
-ac-comphist.dat
+
+.emacs.d/ac-comphist.dat
+.emacs.d/auto-save-list
+.emacs.d/url
+.emacs.d/session.*

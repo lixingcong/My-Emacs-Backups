@@ -514,6 +514,19 @@ that was stored with ska-point-to-register."
   (call-interactively 'indent-region))
 (global-set-key (kbd "C-y") 'yank-and-indent) 
 
+;;Markdown模式 http://jblevins.org/projects/markdown-mode
+;;修改markdown-mode.el取消绑定'M-n'快捷键
+;;编译emacs时候注意安装libxml2-dev，这个markdown模式的preview需要它
+(add-to-list 'load-path "~/.emacs.d/markdown-mode")
+(autoload 'markdown-mode "markdown-mode"
+   "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+;;GitHub渲染模式
+(autoload 'gfm-mode "markdown-mode"
+   "Major mode for editing GitHub Flavored Markdown files" t)
+(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+
 
 ;;===========================================================================
 ;;=============以下设置到文件末尾，不需更改====================================
