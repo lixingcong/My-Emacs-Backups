@@ -19,6 +19,8 @@
     (declare (indent 1) (debug t))
     `(eval-after-load ,file '(progn ,@body))))
 
+
+
 ;; 设置缩进为tab
 ;;(setq indent-tabs-mode nil)
 (setq default-tab-width 4)
@@ -506,14 +508,6 @@ that was stored with ska-point-to-register."
 (define-key global-map [mouse-9] 'linkd-previous-link)
 (define-key global-map [mouse-8] 'linkd-next-link)
 
-;;拷贝自动格式化代码
-(defun yank-and-indent ()
-  "Yank and then indent the newly formed region according to mode."
-  (interactive)
-  (yank)
-  (call-interactively 'indent-region))
-(global-set-key (kbd "C-y") 'yank-and-indent) 
-
 ;;Markdown模式 http://jblevins.org/projects/markdown-mode
 ;;修改markdown-mode.el取消绑定'M-n'快捷键
 ;;编译emacs时候注意安装libxml2-dev，这个markdown模式的preview需要它
@@ -522,12 +516,13 @@ that was stored with ska-point-to-register."
    "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
 ;;GitHub渲染模式
 (autoload 'gfm-mode "markdown-mode"
    "Major mode for editing GitHub Flavored Markdown files" t)
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 
-;; 插入一个缩进符
+;; 插入一个缩进符for markdown
 (defun insert-tab-char ()
   "insert a tab char. (ASCII 9, \t)"
   (interactive)
@@ -540,6 +535,13 @@ that was stored with ska-point-to-register."
 		(define-key markdown-mode-map (kbd "<tab>") 'insert-tab-char)
 		))
 
+;;自动缩进，包含粘贴自动缩进，还有kill-whole-line功能
+;; https://github.com/mattfidler/auto-indent-mode.el
+(setq auto-indent-on-visit-file t) ;; If you want auto-indent on for files
+(require 'auto-indent-mode)
+(auto-indent-global-mode)
+;;设置上述缩进功能的tab宽度
+(setq auto-indent-assign-indent-level 4)
 
 ;;===========================================================================
 ;;=============以下设置到文件末尾，不需更改====================================
