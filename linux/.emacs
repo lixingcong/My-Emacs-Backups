@@ -527,6 +527,19 @@ that was stored with ska-point-to-register."
    "Major mode for editing GitHub Flavored Markdown files" t)
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 
+;; 插入一个缩进符
+(defun insert-tab-char ()
+  "insert a tab char. (ASCII 9, \t)"
+  (interactive)
+  (insert "\t")
+)
+;;取消tab绑定，其实按win+tab可以浏览文章结点,'markdown-cycle'
+(add-hook 'markdown-mode-hook
+      (lambda ()
+		(define-key markdown-mode-map (kbd "TAB") 'insert-tab-char)
+		(define-key markdown-mode-map (kbd "<tab>") 'insert-tab-char)
+		))
+
 
 ;;===========================================================================
 ;;=============以下设置到文件末尾，不需更改====================================
