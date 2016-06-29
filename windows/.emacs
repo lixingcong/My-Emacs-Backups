@@ -28,26 +28,6 @@
     (declare (indent 1) (debug t))
     `(eval-after-load ,file '(progn ,@body))))
 
-;;======================    code setting        =========================
-(dolist (command '(yank yank-pop))
-  (eval
-   `(defadvice ,command (after indent-region activate)
-      (and (not current-prefix-arg)
-           (member major-mode
-                   '(emacs-lisp-mode
-                     lisp-mode
-                     clojure-mode
-                     php-mode
-                     scheme-mode
-                     haskell-mode
-                     ruby-mode
-                     rspec-mode
-                     ;;python-mode
-                     c-mode
-                     c++-mode))
-           (let ((mark-even-if-inactive transient-mark-mode))
-             (indent-region (region-beginning) (region-end) nil))))))
-;;----------------------    END    code setting    ---------------------
 
 ;; 设置缩进为space only
 ;;(setq indent-tabs-mode nil)
@@ -57,7 +37,6 @@
       44 48 52 56 60 64 68 72 76 80 84 88 92 96)) 
  
 
-(setq default-major-mode 'text-mode)
 (fset 'yes-or-no-p 'y-or-n-p)
 (show-paren-mode t)
 (display-time-mode 1)
@@ -499,6 +478,99 @@ that was stored with ska-point-to-register."
 ;;在electric-operator.el中最后的namespace中加入matlab的模式
 (add-hook 'matlab-mode-hook #'electric-operator-mode)
 
+;;latex实时预览 latex-preview-pane
+(load-file "~/.emacs.d/lisp/doc-view.el")
+(setq TeX-PDF-mode t)
+
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (add-to-list
+   'package-archives
+   '("melpa" . "http://melpa.org/packages/")
+   t)
+  (package-initialize))
+
+(latex-preview-pane-enable)
+'(pdf-latex-command "xelatex")
+
+;; 2016-6-7高考（三周年）
+;;In Emacs 24, turn it on in all programming modes using prog-mode-hook.
+;;(add-hook 'prog-mode-hook #'highlight-symbol-mode)
+
+;;自动上下文高亮,不可以全文搜索，只能在当前视窗中搜索上下文
+;;https://marmalade-repo.org/packages/auto-highlight-symbol
+;;快捷键 按Alt+left或者right导航到上一个/下一个
+;;(require 'auto-highlight-symbol)
+;;(global-auto-highlight-symbol-mode t)
+
+
+;;自动上下文高亮，这个可以全文搜索。
+;;https://github.com/nschum/highlight-symbol.el
+(load-file "~/.emacs.d/lisp/highlight-symbol.el" )
+(add-hook 'prog-mode-hook #'highlight-symbol-mode)
+(global-set-key [f3] 'highlight-symbol-next)
+(global-set-key [(shift f3)] 'highlight-symbol-prev)
+
+;;linkd-mode，生成@的跳转：tag下面有star，逐级像xml那样
+(add-to-list 'load-path "~/.emacs.d/linkd")
+(load-file "~/.emacs.d/linkd/linkd.el" )
+(add-hook 'prog-mode-hook #'linkd-mode)
+;;icon目录
+(setq linkd-use-icons t )
+(setq linkd-icons-directory "~/.emacs.d/linkd/icons/")
+;;重定义各种垃圾快捷键
+(define-key linkd-overlay-map [mouse-2] nil)
+(define-key linkd-overlay-map [mouse-4] nil)
+(define-key linkd-overlay-map (kbd "b") nil)
+(define-key linkd-overlay-map (kbd "l") nil)
+(define-key linkd-overlay-map (kbd "[") nil)
+(define-key linkd-overlay-map (kbd "]") nil)
+(define-key linkd-map [mouse-4] nil)
+;;按鼠标前进后退键在相邻的结点游荡
+(define-key global-map [mouse-9] 'linkd-previous-link)
+(define-key global-map [mouse-8] 'linkd-next-link)
+
+;;Markdown模式 http://jblevins.org/projects/markdown-mode
+;;修改markdown-mode.el取消绑定'M-n'快捷键
+;;编译emacs时候注意安装libxml2-dev，这个markdown模式的preview需要它
+(add-to-list 'load-path "~/.emacs.d/markdown-mode")
+(autoload 'markdown-mode "markdown-mode"
+   "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+;;GitHub渲染模式
+(autoload 'gfm-mode "markdown-mode"
+   "Major mode for editing GitHub Flavored Markdown files" t)
+(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+
+;; 插入一个缩进符for markdown
+(defun insert-tab-char ()
+  "insert a tab char. (ASCII 9, \t)"
+  (interactive)
+  (insert "\t")
+)
+;;取消tab绑定，其实按win+tab可以浏览文章结点,'markdown-cycle'
+(add-hook 'markdown-mode-hook
+      (lambda ()
+		(define-key markdown-mode-map (kbd "TAB") 'insert-tab-char)
+		(define-key markdown-mode-map (kbd "<tab>") 'insert-tab-char)
+		))
+
+;;自动缩进，包含粘贴自动缩进，还有kill-whole-line功能
+;; https://github.com/mattfidler/auto-indent-mode.el
+(setq auto-indent-on-visit-file t) ;; If you want auto-indent on for files
+(load-file "~/.emacs.d/lisp/auto-indent-mode.el" )
+(auto-indent-global-mode)
+;;设置上述缩进功能的tab宽度
+(setq auto-indent-assign-indent-level 4)
+
+;; 关闭汇编模式的C-j快捷键
+(add-hook 'asm-mode-hook
+      (lambda ()
+		(define-key asm-mode-map (kbd "C-j") nil)))
+        
+		
 ;;===========================================================================
 ;;=============以下设置到文件末尾，不需更改====================================
 ;;===========================================================================
