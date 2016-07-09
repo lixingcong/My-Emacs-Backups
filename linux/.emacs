@@ -547,7 +547,10 @@ that was stored with ska-point-to-register."
 (add-hook 'asm-mode-hook
       (lambda ()
 		(define-key asm-mode-map (kbd "C-j") nil)))
-		
+
+;;C语言的switch下面的case缩进
+(c-set-offset 'case-label '+)
+
 
 ;;===========================================================================
 ;;=============以下设置到文件末尾，不需更改====================================
