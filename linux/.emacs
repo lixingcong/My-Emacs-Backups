@@ -7,17 +7,17 @@
 
 ;;取消24.3版本函数缺少提示：make-local-hook
 (defalias 'make-local-hook
-  (if (featurep 'xemacs)
-      'make-local-hook
-    'ignore))
+	(if (featurep 'xemacs)
+			'make-local-hook
+		'ignore))
 (require 'util)
 ;;END make-local-hook setting
 
 ;;依赖24.4新版的with-eval-after-load宏定义，所以emacs24.3缺少下面的宏会无法启动。
 (unless (fboundp 'with-eval-after-load)
-  (defmacro with-eval-after-load (file &rest body)
-    (declare (indent 1) (debug t))
-    `(eval-after-load ,file '(progn ,@body))))
+	(defmacro with-eval-after-load (file &rest body)
+		(declare (indent 1) (debug t))
+		`(eval-after-load ,file '(progn ,@body))))
 
 
 
@@ -26,8 +26,8 @@
 (setq default-tab-width 4)
 (setq tab-width 4)
 (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40
-      44 48 52 56 60 64 68 72 76 80 84 88 92 96)) 
- 
+						44 48 52 56 60 64 68 72 76 80 84 88 92 96)) 
+
 
 (setq default-major-mode 'text-mode)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -49,7 +49,7 @@
 (global-font-lock-mode t)
 
 
- 
+
 ;;主题 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 ;;https://github.com/oneKelvinSmith/monokai-emacs
@@ -67,10 +67,10 @@
 
 ;;插入一行
 (global-set-key (kbd "M-n") '(lambda () 
-	(interactive) 
-	(move-end-of-line 1) 
-	(newline-and-indent)))
-	
+								 (interactive) 
+								 (move-end-of-line 1) 
+								 (newline-and-indent)))
+
 
 ;;删除当前行
 (global-set-key (kbd "M-i") 'kill-line)
@@ -100,10 +100,10 @@
 (kill-buffer "*Messages*")
 ;; 打开文件后移除*Completions*
 (add-hook 'minibuffer-exit-hook
-      '(lambda ()
-         (let ((buffer "*Completions*"))
-           (and (get-buffer buffer)
-                (kill-buffer buffer)))))
+		  '(lambda ()
+			   (let ((buffer "*Completions*"))
+				   (and (get-buffer buffer)
+						(kill-buffer buffer)))))
 ;; 当打开多个文件不显示*Buffer list*
 (setq inhibit-startup-buffer-menu t)
 ;; 当打开多个文件只显示一个active window
@@ -137,49 +137,49 @@
 
 ;;快速注释整句按alt+l
 (defun qiang-comment-dwim-line (&optional arg)
-  "Replacement for the comment-dwim command."
-  (interactive "*P")
-  (comment-normalize-vars)
-  (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
-      (comment-or-uncomment-region (line-beginning-position) (line-end-position))
-    (comment-dwim arg)))
+	"Replacement for the comment-dwim command."
+	(interactive "*P")
+	(comment-normalize-vars)
+	(if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
+			(comment-or-uncomment-region (line-beginning-position) (line-end-position))
+		(comment-dwim arg)))
 (global-set-key "\M-l" 'qiang-comment-dwim-line)
 
 ;;快速拷贝整一行,鼠标定位到行首即可拷贝
 (defun qiang-copy-line (arg)
-  "Copy lines (as many as prefix argument) in the kill ring"
-  (interactive "p")
-  (kill-ring-save (point)
-                  (line-end-position))
-                  ;; (line-beginning-position (+ 1 arg)))
-  (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
+	"Copy lines (as many as prefix argument) in the kill ring"
+	(interactive "p")
+	(kill-ring-save (point)
+					(line-end-position))
+	;; (line-beginning-position (+ 1 arg)))
+	(message "%d line%s copied" arg (if (= 1 arg) "" "s")))
 (global-set-key (kbd "M-m") 'qiang-copy-line)
 
 ;;下列3个defadvice不懂什么东西
 (defadvice kill-line (before check-position activate)
-  (if (member major-mode
-              '(emacs-lisp-mode scheme-mode lisp-mode
-                                c-mode c++-mode objc-mode js-mode
-                                latex-mode plain-tex-mode))
-      (if (and (eolp) (not (bolp)))
-          (progn (forward-char 1)
-                 (just-one-space 0)
-                 (backward-char 1)))))
- 
+	(if (member major-mode
+				'(emacs-lisp-mode scheme-mode lisp-mode
+								  c-mode c++-mode objc-mode js-mode
+								  latex-mode plain-tex-mode))
+			(if (and (eolp) (not (bolp)))
+					(progn (forward-char 1)
+						   (just-one-space 0)
+						   (backward-char 1)))))
+
 (defadvice kill-ring-save (before slick-copy activate compile)
-  "When called interactively with no active region, copy a single line instead."
-  (interactive (if mark-active (list (region-beginning) (region-end))
-                 (message "Copied line")
-                 (list (line-beginning-position)
-                       (line-beginning-position 2)))))
- 
+	"When called interactively with no active region, copy a single line instead."
+	(interactive (if mark-active (list (region-beginning) (region-end))
+					 (message "Copied line")
+					 (list (line-beginning-position)
+						   (line-beginning-position 2)))))
+
 (defadvice kill-region (before slick-cut activate compile)
-  "When called interactively with no active region, kill a single line instead."
-  (interactive
-   (if mark-active (list (region-beginning) (region-end))
-     (list (line-beginning-position)
-           (line-beginning-position 2)))))
- 
+	"When called interactively with no active region, kill a single line instead."
+	(interactive
+	 (if mark-active (list (region-beginning) (region-end))
+		 (list (line-beginning-position)
+			   (line-beginning-position 2)))))
+
 ;;打开当前文件夹的终端
 ;;如果是windows的话要改成("cmd" "/c" "start"),如果ubuntu根据实际修改
 ;;http://askubuntu.com/questions/183775/how-do-i-open-a-terminal
@@ -212,19 +212,19 @@
 ;;设置某个点来回跳动光标
 ;;新建标记点
 (defun ska-point-to-register()
-  "Store cursorposition _fast_ in a register.
+	"Store cursorposition _fast_ in a register.
 Use ska-jump-to-register to jump back to the stored
 position."
-  (interactive)
-  (setq zmacs-region-stays t)
-  (point-to-register 8))
+	(interactive)
+	(setq zmacs-region-stays t)
+	(point-to-register 8))
 ;;跳回标记点
 (defun ska-jump-to-register()
-  "Switches between current cursorposition and position
+	"Switches between current cursorposition and position
 that was stored with ska-point-to-register."
-  (interactive)
-  (setq zmacs-region-stays t)
-  (let ((tmp (point-marker)))
+	(interactive)
+	(setq zmacs-region-stays t)
+	(let ((tmp (point-marker)))
         (jump-to-register 8)
         ;;(set-register 8 tmp) ;;这里lxc注释掉了，每次都要多记录一组，反人类。
         ))
@@ -263,16 +263,16 @@ that was stored with ska-point-to-register."
                ac-source-words-in-all-buffer))
 ;;扩充AC-mode
 (dolist (mode '(log-edit-mode org-mode text-mode haml-mode
-                git-commit-mode
-                sass-mode yaml-mode csv-mode espresso-mode haskell-mode
-                html-mode nxml-mode sh-mode smarty-mode clojure-mode
-                lisp-mode textile-mode markdown-mode tuareg-mode
-                js3-mode css-mode less-css-mode sql-mode
-                sql-interactive-mode
-				;;MATLAB
-				matlab-mode
-                inferior-emacs-lisp-mode))
-  				(add-to-list 'ac-modes mode))
+							  git-commit-mode
+							  sass-mode yaml-mode csv-mode espresso-mode haskell-mode
+							  html-mode nxml-mode sh-mode smarty-mode clojure-mode
+							  lisp-mode textile-mode markdown-mode tuareg-mode
+							  js3-mode css-mode less-css-mode sql-mode
+							  sql-interactive-mode
+							  ;;MATLAB
+							  matlab-mode
+							  inferior-emacs-lisp-mode))
+	(add-to-list 'ac-modes mode))
 
 ;;只要里在你文档里有Time-stamp:的字样，启用time-stamp就会自动保存时间戳
 (setq time-stamp-active t)
@@ -293,47 +293,47 @@ that was stored with ska-point-to-register."
 
 ;;设置窗格垂直还是水平(首先按c-x 2，且有多个窗口)
 (defun toggle-window-split ()
-  (interactive)
-  (if (= (count-windows) 2)
-      (let* ((this-win-buffer (window-buffer))
-             (next-win-buffer (window-buffer (next-window)))
-             (this-win-edges (window-edges (selected-window)))
-             (next-win-edges (window-edges (next-window)))
-             (this-win-2nd (not (and (<= (car this-win-edges)
-                                         (car next-win-edges))
-                                     (<= (cadr this-win-edges)
-                                         (cadr next-win-edges)))))
-             (splitter
-              (if (= (car this-win-edges)
-                     (car (window-edges (next-window))))
-                  'split-window-horizontally
-                'split-window-vertically)))
-        (delete-other-windows)
-        (let ((first-win (selected-window)))
-          (funcall splitter)
-          (if this-win-2nd (other-window 1))
-          (set-window-buffer (selected-window) this-win-buffer)
-          (set-window-buffer (next-window) next-win-buffer)
-          (select-window first-win)
-          (if this-win-2nd (other-window 1))))))
+	(interactive)
+	(if (= (count-windows) 2)
+			(let* ((this-win-buffer (window-buffer))
+				   (next-win-buffer (window-buffer (next-window)))
+				   (this-win-edges (window-edges (selected-window)))
+				   (next-win-edges (window-edges (next-window)))
+				   (this-win-2nd (not (and (<= (car this-win-edges)
+											   (car next-win-edges))
+										   (<= (cadr this-win-edges)
+											   (cadr next-win-edges)))))
+				   (splitter
+					(if (= (car this-win-edges)
+						   (car (window-edges (next-window))))
+							'split-window-horizontally
+						'split-window-vertically)))
+				(delete-other-windows)
+				(let ((first-win (selected-window)))
+					(funcall splitter)
+					(if this-win-2nd (other-window 1))
+					(set-window-buffer (selected-window) this-win-buffer)
+					(set-window-buffer (next-window) next-win-buffer)
+					(select-window first-win)
+					(if this-win-2nd (other-window 1))))))
 (global-set-key (kbd "M-3") 'toggle-window-split) 
 
 ;;添加书签功能，按next-error（M-q或者M-a）即可跳至这里
 (defun add-code-review-note ()
-  "Add note for current file and line number"
-  (interactive)
-  (let ((file-name (buffer-file-name))
-		(file-line (line-number-at-pos)))
-	(switch-to-buffer-other-window (get-buffer-create"NOTES"))
-	(goto-char(point-min))
-	(when (not (search-forward"-*- mode:compilation-shell-minor"
-							  nil t))
-	  (compilation-shell-minor-mode 1)
-	  (insert"-*- mode:compilation-shell-minor -*-\n\n"))
-	(goto-char(point-max))
-	(if(/= (current-column) 0)
-		(newline))
-	(insert file-name":"(number-to-string file-line)": ")))
+	"Add note for current file and line number"
+	(interactive)
+	(let ((file-name (buffer-file-name))
+		  (file-line (line-number-at-pos)))
+		(switch-to-buffer-other-window (get-buffer-create"NOTES"))
+		(goto-char(point-min))
+		(when (not (search-forward"-*- mode:compilation-shell-minor"
+								  nil t))
+			(compilation-shell-minor-mode 1)
+			(insert"-*- mode:compilation-shell-minor -*-\n\n"))
+		(goto-char(point-max))
+		(if(/= (current-column) 0)
+				(newline))
+		(insert file-name":"(number-to-string file-line)": ")))
 (global-set-key (kbd "M-h") 'add-code-review-note) 
 ;;根据语法缩进
 (global-set-key (kbd "M-o") 'indent-according-to-mode) 
@@ -391,17 +391,17 @@ that was stored with ska-point-to-register."
 
 ;;python缩进4个空格
 (add-hook 'python-mode-hook
-      (lambda ()
-        (setq indent-tabs-mode t)
-        (setq tab-width 4)
-        (setq python-indent 4)))
-        
+		  (lambda ()
+			  (setq indent-tabs-mode t)
+			  (setq tab-width 4)
+			  (setq python-indent 4)))
+
 
 ;;2016.1
 ;;K&R 风格
 (setq c-default-style "k&r"
-	c-basic-offset 4)
-	
+	  c-basic-offset 4)
+
 ;;开启剪贴后删除当前set-mark内容
 (delete-selection-mode)
 
@@ -435,9 +435,9 @@ that was stored with ska-point-to-register."
 
 ;;加入web-mode的Auto-complete插件，配合AC使用
 (setq web-mode-ac-sources-alist
-  '(("css" . (ac-source-css-property))
-    ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
-    
+	  '(("css" . (ac-source-css-property))
+		("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+
 ;;行号左对齐，占位符2个，"-2d"其后紧跟一个空格隔开代码
 (setq linum-format "%-2d ") 
 ;;默认启动字体大小，修改最后一个数字大小，100为原百分比。
@@ -460,14 +460,14 @@ that was stored with ska-point-to-register."
 (require 'matlab)
 ;;绑定 matlab-mode 的Hook
 (add-hook 'matlab-mode-hook
-      (lambda ()
-		;;MATLAB不支持utf-8，故显示中文需要GBK编码
-		(set-buffer-file-coding-system 'gbk)
-		(define-key matlab-mode-map (kbd "C-j") nil)
-		(define-key matlab-mode-map (kbd "M-j") nil)
-		(define-key matlab-mode-map (kbd "M-c") nil)
-		))
-		
+		  (lambda ()
+			  ;;MATLAB不支持utf-8，故显示中文需要GBK编码
+			  (set-buffer-file-coding-system 'gbk)
+			  (define-key matlab-mode-map (kbd "C-j") nil)
+			  (define-key matlab-mode-map (kbd "M-j") nil)
+			  (define-key matlab-mode-map (kbd "M-c") nil)
+			  ))
+
 ;;在electric-operator.el中最后的namespace中加入matlab的模式
 (add-hook 'matlab-mode-hook #'electric-operator-mode)
 
@@ -513,27 +513,27 @@ that was stored with ska-point-to-register."
 ;;编译emacs时候注意安装libxml2-dev，这个markdown模式的preview需要它
 (add-to-list 'load-path "~/.emacs.d/markdown-mode")
 (autoload 'markdown-mode "markdown-mode"
-   "Major mode for editing Markdown files" t)
+	"Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
 ;;GitHub渲染模式
 (autoload 'gfm-mode "markdown-mode"
-   "Major mode for editing GitHub Flavored Markdown files" t)
+	"Major mode for editing GitHub Flavored Markdown files" t)
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 
 ;; 插入一个缩进符for markdown
 (defun insert-tab-char ()
-  "insert a tab char. (ASCII 9, \t)"
-  (interactive)
-  (insert "\t")
-)
+	"insert a tab char. (ASCII 9, \t)"
+	(interactive)
+	(insert "\t")
+	)
 ;;取消tab绑定，其实按win+tab可以浏览文章结点,'markdown-cycle'
 (add-hook 'markdown-mode-hook
-      (lambda ()
-		(define-key markdown-mode-map (kbd "TAB") 'insert-tab-char)
-		(define-key markdown-mode-map (kbd "<tab>") 'insert-tab-char)
-		))
+		  (lambda ()
+			  (define-key markdown-mode-map (kbd "TAB") 'insert-tab-char)
+			  (define-key markdown-mode-map (kbd "<tab>") 'insert-tab-char)
+			  ))
 
 ;;自动缩进，包含粘贴自动缩进，还有kill-whole-line功能
 ;; https://github.com/mattfidler/auto-indent-mode.el
@@ -545,72 +545,24 @@ that was stored with ska-point-to-register."
 
 ;; 关闭汇编模式的C-j快捷键
 (add-hook 'asm-mode-hook
-      (lambda ()
-		(define-key asm-mode-map (kbd "C-j") nil)))
+		  (lambda ()
+			  (define-key asm-mode-map (kbd "C-j") nil)))
 
 ;;C语言的switch下面的case缩进
 (c-set-offset 'case-label '+)
 
-
 ;;===========================================================================
 ;;=============以下设置到文件末尾，不需更改====================================
 ;;===========================================================================
-;;Emacs自动生成的配置
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#272822" "#F92672" "#A6E22E" "#E6DB74" "#66D9EF" "#FD5FF0" "#A1EFE4" "#F8F8F2"])
- '(compilation-message-face (quote default))
  '(custom-enabled-themes (quote (molokai)))
  '(custom-safe-themes
    (quote
-	("c3c0a3702e1d6c0373a0f6a557788dfd49ec9e66e753fb24493579859c8e95ab" "43c28691d61b1232c5bed4517a168123245cc793faea84ffd1182b0fe38a6f4d" default)))
- '(display-time-mode t)
- '(fci-rule-color "#3E3D31")
- '(highlight-changes-colors (quote ("#FD5FF0" "#AE81FF")))
- '(highlight-tail-colors
-   (quote
-	(("#3E3D31" . 0)
-	 ("#67930F" . 20)
-	 ("#349B8D" . 30)
-	 ("#21889B" . 50)
-	 ("#968B26" . 60)
-	 ("#A45E0A" . 70)
-	 ("#A41F99" . 85)
-	 ("#3E3D31" . 100))))
- '(magit-diff-use-overlays nil)
- '(pos-tip-background-color "#A6E22E")
- '(pos-tip-foreground-color "#272822")
- '(show-paren-mode t)
- '(vc-annotate-background nil)
- '(vc-annotate-color-map
-   (quote
-	((20 . "#F92672")
-	 (40 . "#CF4F1F")
-	 (60 . "#C26C0F")
-	 (80 . "#E6DB74")
-	 (100 . "#AB8C00")
-	 (120 . "#A18F00")
-	 (140 . "#989200")
-	 (160 . "#8E9500")
-	 (180 . "#A6E22E")
-	 (200 . "#729A1E")
-	 (220 . "#609C3C")
-	 (240 . "#4E9D5B")
-	 (260 . "#3C9F79")
-	 (280 . "#A1EFE4")
-	 (300 . "#299BA6")
-	 (320 . "#2896B5")
-	 (340 . "#2790C3")
-	 (360 . "#66D9EF"))))
- '(vc-annotate-very-old-color nil)
- '(weechat-color-list
-   (unspecified "#272822" "#3E3D31" "#A20C41" "#F92672" "#67930F" "#A6E22E" "#968B26" "#E6DB74" "#21889B" "#66D9EF" "#A41F99" "#FD5FF0" "#349B8D" "#A1EFE4" "#F8F8F2" "#F8F8F0")))
- 
- ;;Emacs自动生成的配置
+	("c3c0a3702e1d6c0373a0f6a557788dfd49ec9e66e753fb24493579859c8e95ab" default))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
