@@ -1,10 +1,9 @@
-;;; -*- lexical-binding: t; -*-
-;;; electric-operator.el --- Automatically add spaces around operators
+;;; electric-operator.el --- Automatically add spaces around operators -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2015 Free Software Foundation, Inc.
 
 ;; Author: David Shepherd <davidshepherd7@gmail.com>
-;; Version: 0.1
+;; Version: 0.3
 ;; Package-Requires: ((dash "2.10.0") (names "20150618.0") (emacs "24.4"))
 ;; Keywords: electric
 ;; URL: https://github.com/davidshepherd7/electric-operator
@@ -47,19 +46,30 @@
 (defcustom c-pointer-type-style 'variable
   "Defines how C/C++ mode pointer and reference types are spaced.
 
-If set to 'variable then the operator is touching the variable
+If set to 'variable' then the operator is touching the variable
 name, as in `int *x'.
 
-If set to 'type then the operator is touching the type name , as
+If set to 'type' then the operator is touching the type name , as
 in `int* x'."
   :group 'electricity
+  :type 'symbol
   :options '(variable type))
+
+(defcustom R-named-argument-style 'unspaced
+  "Defines whether = in R named function arguments should be
+spaced.
+
+Setting the value to 'spaced' results in f(foo = 1), 'unspaced'
+results in f(foo=1)."
+  :group 'electricity
+  :type 'symbol
+  :options '(spaced unspaced))
 
 
 
 ;;; Other variables
 
-(defvar mode-rules-table
+(defvar -mode-rules-table
   (make-hash-table)
   "A hash table of replacement rule lists for specific major modes")
 
@@ -89,19 +99,24 @@ Returns a modified copy of the rule list."
 Returns a modified copy of the rule list."
   (-add-rule-list initial new-rules))
 
+
+;; All rule manipulation should be done through these functions and not by
+;; using puthash/gethash directly because it's plausible that the
+;; underlying data structure could be changed (e.g. to an alist).
+
 (defun get-rules-for-mode (major-mode-symbol)
   "Get the spacing rules for major mode"
-  (gethash major-mode-symbol mode-rules-table))
+  (gethash major-mode-symbol -mode-rules-table))
 
 (defun add-rules-for-mode (major-mode-symbol &rest new-rules)
   "Replace or add spacing rules for major mode
 
-Destructively modifies mode-rules-table to use the new rules for
+Destructively modifies `electric-operator--mode-rules-table' to use the new rules for
 the given major mode."
   (puthash major-mode-symbol
            (-add-rule-list (get-rules-for-mode major-mode-symbol)
                            new-rules)
-           mode-rules-table))
+           -mode-rules-table))
 
 
 
@@ -149,17 +164,24 @@ the given major mode."
 ;;; Core functions
 
 (defun get-rules-list ()
-  "Pick which rule list is appropriate for spacing at point"
-  (cond
-   ;; In comment or string?
-   ((in-docs?) (if enable-in-docs prose-rules (list)))
+  "Pick which rule list is appropriate for spacing just before point"
+  (save-excursion
+    ;; We want to look one character before point because this is called
+    ;; via post-self-insert-hook (there is no pre-self-insert-hook). This
+    ;; allows us to correctly handle cases where the just-inserted
+    ;; character ended a comment/string/...
+    (forward-char -1)
 
-   ;; Try to find an entry for this mode in the table
-   ((get-rules-for-mode major-mode))
+    (cond
+     ;; In comment or string?
+     ((in-docs?) (if enable-in-docs prose-rules (list)))
 
-   ;; Default modes
-   ((derived-mode-p 'prog-mode) prog-mode-rules)
-   (t prose-rules)))
+     ;; Try to find an entry for this mode in the table
+     ((get-rules-for-mode major-mode))
+
+     ;; Default modes
+     ((derived-mode-p 'prog-mode) prog-mode-rules)
+     (t prose-rules))))
 
 (defun rule-regex-with-whitespace (op)
   "Construct regex matching operator and any whitespace before/inside/after.
@@ -179,26 +201,44 @@ Whitespace before the operator is captured for possible use later.
        (-sort (lambda (p1 p2) (> (length (car p1)) (length (car p2)))) it)
        (car it)))
 
+(defun eval-action (action point)
+  (cond
+   ((functionp action) (save-excursion (goto-char point) (funcall action)))
+   ((stringp action) action)
+   (t (error "Unrecognised action: %s" action))))
+
 (defun post-self-insert-function ()
   "Check for a matching rule and apply it"
   (-let* ((rule (longest-matching-rule (get-rules-list)))
           ((operator . action) rule))
     (when (and rule action)
 
-      ;; Delete the characters matching this rule before point
+      ;; Find point where operator starts
       (looking-back-locally (rule-regex-with-whitespace operator) t)
-      (let ((pre-whitespace (match-string 1)))
-        (delete-region (match-beginning 0) (match-end 0))
 
-        ;; If this is the first thing in a line then restore the
-        ;; indentation.
-        (if (looking-back-locally "^\s*")
+      ;; Capture operator include leading and trailing whitespace
+      (save-excursion
+        (goto-char (match-beginning 0))
+        (looking-at (rule-regex-with-whitespace operator)))
+
+      (let* ((pre-whitespace (match-string 1))
+             (op-match-beginning (match-beginning 0))
+             (op-match-end (match-end 0))
+             (spaced-string (eval-action action op-match-beginning)))
+
+        ;; If action was a function which eval-d to nil then we do nothing.
+        (when spaced-string
+
+          ;; Delete the characters matching this rule before point
+          (delete-region op-match-beginning op-match-end)
+
+          ;; If this is the first thing in a line then restore the
+          ;; indentation.
+          (when (looking-back-locally "^\s*")
             (insert pre-whitespace))
 
-        ;; Insert correctly spaced operator
-        (if (stringp action)
-            (insert action)
-          (insert (funcall action)))))))
+          ;; Insert correctly spaced operator
+          (insert spaced-string))))))
 
 :autoload
 (define-minor-mode mode
@@ -249,25 +289,25 @@ if not inside any parens."
 
 (i.e. takes one argument). This is a bit of a fudge based on C-like syntax."
   (or
-   (looking-back-locally "^")
-   (looking-back-locally "[=,:\*\+-/><&^]")
-   (looking-back-locally "\\(return\\)")))
+   (looking-back-locally "^\\s-*")
+   (looking-back-locally "[=,:\*\+-/><&^{]\\s-*")
+   (looking-back-locally "\\(return\\)\\s-*")))
 
 (defun just-inside-bracket ()
   (looking-back-locally "[([{]"))
 
-t(defun looking-back-locally (string &optional greedy)
-   "A wrapper for looking-back limited to the two previous lines
+(defun looking-back-locally (string &optional greedy)
+  "A wrapper for looking-back limited to the two previous lines
 
 Apparently looking-back can be slow without a limit, and calling
 it without a limit is deprecated.
 
 Any better ideas would be welcomed."
-   (let ((two-lines-up (save-excursion
-                         (forward-line -2)
-                         (beginning-of-line)
-                         (point))))
-     (looking-back string two-lines-up greedy)))
+  (let ((two-lines-up (save-excursion
+                        (forward-line -2)
+                        (beginning-of-line)
+                        (point))))
+    (looking-back string two-lines-up greedy)))
 
 
 
@@ -363,14 +403,19 @@ Any better ideas would be welcomed."
                     ;; Nested templates
                     (cons ">>" #'c++-mode->>)
 
-                    ;; Handle for-each loops as well
+                    ;; Handle for-each loops, public/private as well
                     (cons ":" #'c++-mode-:)
 
                     ;; Namespaces
                     (cons "::" "::")
 
                     ;; Lambdas
-                    (cons "->" #'c++-mode-->))
+                    (cons "->" #'c++-mode-->)
+
+                    ;; Templates are hard to deal with sensibly
+                    (cons "<" nil)
+                    (cons ">" nil)
+                    )
 
 ;; Construct and add null rules for operator=, operator<< etc.
 (--> (get-rules-for-mode 'c++-mode)
@@ -437,6 +482,9 @@ Using `cc-mode''s syntactic analysis."
 (defun c++-mode-: ()
   "Handle ternary, case, or for each"
   (cond
+   ;; Public/private class methods
+   ((looking-back-locally "private\\|public\\|protected") ":")
+
    ;; The colon in `class Foo : public Bar`
    ((c-is-function-or-class-definition?) " : ")
 
@@ -554,11 +602,16 @@ Using `cc-mode''s syntactic analysis."
                     (cons "-" #'python-mode-negative-slices)
                     )
 
+(defun python-mode-in-lambda-args? ()
+  "Are we inside the arguments statement of a lambda?"
+  (looking-back-locally "lambda[^:]*"))
+
 (defun python-mode-: ()
   "Handle python dict assignment"
-  (if (eq (enclosing-paren) ?\{)
-      ": "
-    ":"))
+  (cond
+   ((python-mode-in-lambda-args?) ": ")
+   ((eq (enclosing-paren) ?\{) ": ")
+   (t ":")))
 
 (defun python-mode-* ()
   "Handle python *args"
@@ -576,9 +629,10 @@ Using `cc-mode''s syntactic analysis."
         (t " ** ")))
 
 (defun python-mode-kwargs-= ()
-  (if (eq (enclosing-paren) ?\()
-      "="
-    " = "))
+  (cond
+   ((python-mode-in-lambda-args?) "=")
+   ((eq (enclosing-paren) ?\() "=")
+   (t " = ")))
 
 (defun python-mode-negative-slices ()
   "Handle cases like a[1:-1], see issue #2."
@@ -597,8 +651,16 @@ Using `cc-mode''s syntactic analysis."
       ": "
     " : "))
 
-(puthash 'js-mode
-         (add-rules prog-mode-rules
+(defun js-mode-/ ()
+  "Handle regex literals and division"
+  ;; Closing / counts as being inside a string so we don't need to do
+  ;; anything.
+  (if (probably-unary-operator?)
+      nil
+    (prog-mode-/)))
+
+(apply #'add-rules-for-mode 'js-mode prog-mode-rules)
+(add-rules-for-mode 'js-mode
                     (cons "%=" " %= ")
                     (cons "++" "++ ")
                     (cons "--" "-- ")
@@ -608,16 +670,78 @@ Using `cc-mode''s syntactic analysis."
                     (cons ">>" " >> ")
                     (cons ":" #'js-mode-:)
                     (cons "?" " ? ")
+                    (cons "/" #'js-mode-/)
+                    (cons "//" "// ")
+                    (cons "/*" "/* ")
+                    (cons "=>" " => ") ; ES6 arrow functions
                     )
-         mode-rules-table)
 
+
+
+;;; Rust mode tweaks
+
+(apply #'add-rules-for-mode 'rust-mode prog-mode-rules)
+(add-rules-for-mode 'rust-mode
+                    ;; templates are hard
+                    (cons "<" nil)
+                    (cons ">" nil)
+
+                    ;; mut vs. bitwise and
+                    (cons "&" nil)
+
+                    ;; pointer deref vs multiplication
+                    (cons "*" nil)
+
+                    ;; Comments are not division
+                    (cons "//" "// ")
+
+                    ;; Extra operators
+                    (cons "<<" " << ")
+                    (cons ">>" " >> ")
+                    (cons "->" " -> ")
+                    (cons "=>" " => ")
+
+                    )
+
+
+
+;; R tweaks (ess mode)
+
+(defun ess-mode-keyword-args-= ()
+  (if (and (eq R-named-argument-style 'unspaced)
+           (eq (enclosing-paren) ?\())
+      "="
+    " = "))
+
+(apply #'add-rules-for-mode 'ess-mode prog-mode-rules)
+(add-rules-for-mode 'ess-mode
+                    (cons "." nil) ; word separator
+                    (cons "<-" " <- ") ; assignment
+                    (cons "->" " -> ") ; Right assignment
+                    (cons "%%" " %% ") ; Modulus
+                    (cons "%/%" " %/% ") ; Integer divide
+                    (cons "%*%" " %*% ") ; Matrix product
+                    (cons "%o%" " %o% ") ; Outer product
+                    (cons "%x%" " %x% ") ; Kronecker product
+                    (cons "%in%" " %in% ") ; Matching operator
+                    (cons "~" " ~ ") ; "is modeled by"
+                    (cons "%>%" " %>% ") ; Pipe (magrittr)
+                    (cons "%<>%" " %<>% ") ; Assignment pipe (magrittr)
+                    (cons "%$%" " %$% ") ; Exposition pipe (magrittr)
+                    (cons "%T>%" " %T>% ") ; Tee operator (magrittr)
+                    (cons "=" #'ess-mode-keyword-args-=)
+                    )
+
+;; ess-mode binds comma to a function, so we need to advise that function
+;; to also run our code:
+(with-eval-after-load 'ess-mode
+  (advice-add 'ess-smart-comma :after #'post-self-insert-function))
 
 
 
 ;;; Other major mode tweaks
 
-(apply #'add-rules-for-mode 'ruby-mode
-       prog-mode-rules)
+(apply #'add-rules-for-mode 'ruby-mode prog-mode-rules)
 (add-rules-for-mode 'ruby-mode
                     (cons "=~" " =~ ") ; regex equality
                     )
@@ -658,6 +782,10 @@ Using `cc-mode''s syntactic analysis."
                     ;; Comments
                     (cons "/*" "/* ")
                     (cons "//" "// ")
+
+                    ;; Generics are hard
+                    (cons "<" nil)
+                    (cons ">" nil)
                     )
 
 ;; Again: based on a syntax guide and not really tested
@@ -683,28 +811,6 @@ Using `cc-mode''s syntactic analysis."
                     (cons "^^" " ^^ ")
                     )
 
-;; Integration testing these is hard because ess-mode is not built in to
-;; emacs and it's weird (doesn't define autoloads, doesn't inherit from
-;; prog-mode, ...).
-(apply #'add-rules-for-mode 'ess-mode prog-mode-rules)
-(add-rules-for-mode 'ess-mode
-                    (cons "." nil) ; word separator
-                    (cons "<-" " <- ") ; assignment
-                    (cons "->" " -> ") ; Right assignment
-                    (cons "%%" " %% ") ; Modulus
-                    (cons "%/%" " %/% ") ; Integer divide
-                    (cons "%*%" " %*% ") ; Matrix product
-                    (cons "%o%" " %o% ") ; Outer product
-                    (cons "%x%" " %x% ") ; Kronecker product
-                    (cons "%in%" " %in% ") ; Matching operator
-                    )
-
-;; ess-mode binds comma to a function, so we need to advise that function
-;; to also run our code:
-(with-eval-after-load 'ess-mode
-  (advice-add 'ess-smart-comma :after #'post-self-insert-function))
-
-
 (apply #'add-rules-for-mode 'php-mode prog-mode-rules)
 (add-rules-for-mode 'php-mode
                     (cons "**" " ** ")
@@ -719,6 +825,30 @@ Using `cc-mode''s syntactic analysis."
                     )
 
 
+;; Coffee script support based on http://coffeescript.org/#operators
+(apply #'add-rules-for-mode 'coffee-mode prog-mode-rules)
+(add-rules-for-mode 'coffee-mode
+                    (cons "**" " ** ")
+                    (cons "//" " // ")
+                    (cons "///" " /// ")
+                    (cons "%%" " %% ")
+                    (cons "?" "? ")
+                    (cons "?=" " ?= ")
+                    (cons "?." "?.")
+                    (cons "->" " -> ")
+                    (cons "=>" " => ")
+                    )
+
+(apply #'add-rules-for-mode 'sql-mode prog-mode-rules)
+(add-rules-for-mode 'sql-mode
+                    (cons "-" nil)
+                    (cons "=" nil))
+
+;; Don't use either prog or text mode defaults, css is too different
+(add-rules-for-mode 'css-mode
+                    (cons ":" ": ")
+                    (cons "," ", "))
+
 ;; add by lixingcong: MATLAB
 (apply #'add-rules-for-mode 'matlab-mode prog-mode-rules)
 (add-rules-for-mode 'matlab-mode
@@ -727,13 +857,9 @@ Using `cc-mode''s syntactic analysis."
 					(cons ".\\" " .\\ ")
 					(cons ".+" " .+ ")
 					(cons ".-" " .- ")
-					(cons ".*" " .* ")
-                    )
-
+					(cons ".*" " .* "))
 
 ) ; end of namespace
-
-
 
 (provide 'electric-operator)
 
