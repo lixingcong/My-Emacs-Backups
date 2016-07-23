@@ -551,6 +551,20 @@ that was stored with ska-point-to-register."
 ;;C语言的switch下面的case缩进
 (c-set-offset 'case-label '+)
 
+;; 绑定F9 显示TAB，尤其是在Python提示unindent block查错时候需要这个mode
+(global-set-key [(f9)] 'whitespace-mode)
+(setq whitespace-display-mappings
+	'((space-mark   ?\     [? ]) ;; use space not dot
+		(space-mark   ?\xA0  [?\u00A4]     [?_])
+		(space-mark   ?\x8A0 [?\x8A4]      [?_])
+		(space-mark   ?\x920 [?\x924]      [?_])
+		(space-mark   ?\xE20 [?\xE24]      [?_])
+		(space-mark   ?\xF20 [?\xF24]      [?_])
+		(newline-mark ?\n    [?$ ?\n])
+		(tab-mark     ?\t    [?\u00BB ?\t] [?\\ ?\t])))
+
+
+
 ;;===========================================================================
 ;;=============以下设置到文件末尾，不需更改====================================
 ;;===========================================================================
