@@ -61,7 +61,7 @@
 
 
 ;;设置默认的编译选项
-(setq compile-command "g++ -g -o 1 ")
+(setq compile-command "gcc -o 1 ")
 ;;编译
 (global-set-key (kbd "C-M-z") 'compile)
 
