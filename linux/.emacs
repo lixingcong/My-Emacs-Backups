@@ -639,12 +639,6 @@ that was stored with ska-point-to-register."
 ;; 设置scratch为只读，避免产生大量垃圾文件
 (read-only-mode)
 
-;; Removes *scratch* from buffer after the mode has been set.
-(defun remove-scratch-buffer ()
-  (if (get-buffer "*scratch*")
-      (kill-buffer "*scratch*")))
-(add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
-
 
 ;;===========================================================================
 ;;=============以下设置到文件末尾，不需更改====================================
