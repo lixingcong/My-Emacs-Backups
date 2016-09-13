@@ -187,7 +187,7 @@
 	(interactive)
 	(apply 'start-process "terminal" nil popup-terminal-command)
 	)
-(setq popup-terminal-command '("gnome-terminal"))
+(setq popup-terminal-command '("konsole"))
 (global-set-key (kbd "C-M-c") 'popup-term)
 
 ;;显示高亮当前行
@@ -535,14 +535,6 @@ that was stored with ska-point-to-register."
 			  (define-key markdown-mode-map (kbd "<tab>") 'insert-tab-char)
 			  ))
 
-;;自动缩进，包含粘贴自动缩进，还有kill-whole-line功能
-;; https://github.com/mattfidler/auto-indent-mode.el
-(setq auto-indent-on-visit-file t) ;; If you want auto-indent on for files
-(require 'auto-indent-mode)
-(auto-indent-global-mode)
-;;设置上述缩进功能的tab宽度
-(setq auto-indent-assign-indent-level 4)
-
 ;; 关闭汇编模式的C-j快捷键
 (add-hook 'asm-mode-hook
 		  (lambda ()
@@ -563,6 +555,95 @@ that was stored with ska-point-to-register."
 		(newline-mark ?\n    [?$ ?\n])
 		(tab-mark     ?\t    [?\u00BB ?\t] [?\\ ?\t])))
 
+;; 2016.09.13
+;; c模式下自动注释TAB对齐
+(add-hook 'c-mode-hook 'auto-fill-mode)
+(setq comment-auto-fill-only-comments t)
+(setq-default fill-column 80)
+
+;; 注释风格：从/* xx */ 转成单行注释 //
+(add-hook 'c-mode-hook (lambda () (setq comment-start "// "
+										comment-end   "")))
+
+
+;; ctrl+tab 切换buffer
+;; http://stackoverflow.com/questions/7699870/buffer-cycling-in-emacs-avoiding-scratch-and-messages-buffer
+; necessary support function for buffer burial
+(defun crs-delete-these (delete-these from-this-list)
+  "Delete DELETE-THESE FROM-THIS-LIST."
+  (cond
+   ((car delete-these)
+    (if (member (car delete-these) from-this-list)
+        (crs-delete-these (cdr delete-these) (delete (car delete-these)
+                                                 from-this-list))
+      (crs-delete-these (cdr delete-these) from-this-list)))
+   (t from-this-list)))
+; this is the list of buffers I never want to see
+(defvar crs-hated-buffers
+  '("KILL" "*Compile-Log*"))
+; might as well use this for both
+(setq iswitchb-buffer-ignore (append '("^ " "*Buffer") crs-hated-buffers))
+(defun crs-hated-buffers ()
+  "List of buffers I never want to see, converted from names to buffers."
+  (delete nil
+          (append
+           (mapcar 'get-buffer crs-hated-buffers)
+           (mapcar (lambda (this-buffer)
+                     (if (string-match "^ " (buffer-name this-buffer))
+                         this-buffer))
+                   (buffer-list)))))
+; I'm sick of switching buffers only to find KILL right in front of me
+(defun crs-bury-buffer (&optional n)
+  (interactive)
+  (unless n
+    (setq n 1))
+  (let ((my-buffer-list (crs-delete-these (crs-hated-buffers)
+                                          (buffer-list (selected-frame)))))
+    (switch-to-buffer
+     (if (< n 0)
+         (nth (+ (length my-buffer-list) n)
+              my-buffer-list)
+       (bury-buffer)
+       (nth n my-buffer-list)))))
+          
+;; 循环切换排除的Buffer名字
+(add-to-list 'crs-hated-buffers "*Messages*")
+(add-to-list 'crs-hated-buffers "*scratch*")
+(add-to-list 'crs-hated-buffers "*compilation*")
+;; 切换buffer快捷键
+(global-set-key (kbd "<C-tab>") 'crs-bury-buffer)  
+
+;; 强制插入一个TAB
+(global-set-key (kbd "C-t") 'insert-tab-char)
+
+;; 删除多余whitespace字符，例如多个空行
+;; http://emacsblog.org/2007/06/07/quick-tip-delete-blank-lines/
+(defun my-fixup-whitespace ()
+  (interactive "*")
+  (if (or (eolp)
+          (save-excursion
+            (beginning-of-line)
+            (looking-at "^\\s *$")))
+      (delete-blank-lines)
+      (fixup-whitespace)))
+      
+;; 快捷键清除多个空行
+(global-set-key (kbd "C-<backspace>") 'my-fixup-whitespace)
+
+;; 退格键删除一个字符宽度，原先的情况是插入一个TAB，要按4次退格才删掉
+(global-set-key (kbd "<backspace>") 'delete-backward-char)
+
+;; 保存前删掉所有尾空格 trailing space
+(add-hook 'before-save-hook 'whitespace-cleanup)
+
+;; 设置scratch为只读，避免产生大量垃圾文件
+(read-only-mode)
+
+;; Removes *scratch* from buffer after the mode has been set.
+(defun remove-scratch-buffer ()
+  (if (get-buffer "*scratch*")
+      (kill-buffer "*scratch*")))
+(add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
 
 
 ;;===========================================================================
