@@ -64,7 +64,7 @@
       (molokai-bg             "#1b1d1e")
       (molokai-grey+10        "#080808")
       (molokai-dark           "#000000")
-      (molokai-base01         "#465457")
+      (molokai-base01         "#8C8C8C")
       (molokai-base02         "#455354")
       (molokai-base03         "#293739")
       (molokai-dodgerblue     "#13354a"))
