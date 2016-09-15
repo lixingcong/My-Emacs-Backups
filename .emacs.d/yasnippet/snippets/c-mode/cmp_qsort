@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: cmp(qsort)
-# key: cmp(qsort)
-# --
-int cmp(const void * a, const void * b)
-{return ( *(${1:type?}*)b - *(${2:type?}*)a );}

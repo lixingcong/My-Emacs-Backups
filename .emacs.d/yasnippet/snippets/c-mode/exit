@@ -2,5 +2,4 @@
 # name: exit()
 # key: exit()
 # --
-exit(0);//include <cstdlib>
-
+exit(0);

@@ -2,4 +2,4 @@
 # name: malloc
 # key: malloc()
 # --
-${return void*?} malloc(sizeof(${1:what?}));//include <cstdlib>
+${return void*?} malloc(sizeof(${1:what?}));

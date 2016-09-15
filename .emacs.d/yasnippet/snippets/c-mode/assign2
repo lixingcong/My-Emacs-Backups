@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: .assign() 
-# key: assign(const string& str,size_t pos,size_t n)
-# --
-assign(${&str},${pos},${n});

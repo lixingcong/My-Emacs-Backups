@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: char[]
-# key: char[]
-# --
-char ${1:name}[${2:count}];

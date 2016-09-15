@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: atoi
-# key: atoi(char *str)
-# --
-atoi(${});//include <cstdlib>$0

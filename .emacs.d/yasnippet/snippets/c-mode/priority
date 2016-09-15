@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: priority_queue
-# key: priority_queue
-# --
-priority_queue <${1:int},vector<${2:int}>,${3:cmp}> ${4:var};
