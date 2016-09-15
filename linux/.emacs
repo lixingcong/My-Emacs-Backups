@@ -563,7 +563,7 @@ that was stored with ska-point-to-register."
 
 ;; 注释风格：从/* xx */ 转成单行注释 //
 (add-hook 'c-mode-hook (lambda () (setq comment-start "// "
-										comment-end   "")))
+                                        comment-end   "")))
 
 
 ;; ctrl+tab 切换buffer
@@ -638,6 +638,12 @@ that was stored with ska-point-to-register."
 
 ;; 设置scratch为只读，避免产生大量垃圾文件
 (read-only-mode)
+
+;; 拼写检查，开启全文拼写检查ctrl+f8，对一个词检查F8
+(require 'flyspell)
+(setq ispell-dictionary "en_US")
+(global-set-key [(f8)] 'ispell-word)
+(global-set-key (kbd "C-<f8>") 'flyspell-mode)
 
 
 ;;===========================================================================
